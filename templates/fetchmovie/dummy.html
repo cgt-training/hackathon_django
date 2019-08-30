@@ -1,0 +1,41 @@
+{% extends 'fetchmovie/base.html' %}
+{% block content %}
+	<h1>
+		Top 20 Action Movies
+	</h1>
+	<div id="owl-example" class="owl-carousel">
+		{% for row_movie in action_movie_list%}
+
+			<div class="owl-content-div" onclick="return sendMovieObject('{{ row_movie|escapejs }}')" >
+				<div class="owl-content-img">
+					{% load static %}
+					<img src="{% static 'images/action_movie_icon.png' %}" style="height: 60px;width: 60px;">
+				</div>
+				<div class="owl-text-main">
+					<div class="owl-content-text">
+						{{row_movie.title}}
+					</div>
+					<div class="owl-content-text-bottom">
+						Rating: {{row_movie.vote_average}}
+					</div>
+				</div> <!-- owl-text-main -->   
+			</div>	<!-- owl-content-div -->
+		
+		{% endfor %}
+	</div>
+{% endblock %}
+
+<!-- <script type="text/javascript">
+	function sendMovieObject(objVal){
+        
+        $.ajax({
+          type: "POST",
+          url: "{% url 'moviedetail' %}",
+          data: objVal,
+          success: function(result){
+            // alert("Success");
+            console.log(result);
+          }
+        });
+    }
+</script> -->

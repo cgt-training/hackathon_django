@@ -1,0 +1,21 @@
+{% extends 'fetchmovie/base.html' %}
+{% block content %}
+	<h1>Here's top 20 recommended movies for you</h1>
+	<table id="movies">
+		<tr>
+	        <th>Movie Name</th>
+	        <th>Action</th>
+	    </tr>
+		{% for row_movie in movie_list%}
+		<tr>
+			<td>
+				{{row_movie}}
+			</td>
+			<td>
+				<button><i class="fa fa-edit"></i> Click For Detail</button>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock %}
+
