@@ -1,11 +1,14 @@
 from django.http import HttpResponse
 import pandas as pd
+import warnings; warnings.simplefilter('ignore')
 import os
 import json
 from django.conf import settings
 from django.shortcuts import render
 import requests
 import numpy as np
+import csv
+
 
 try:
 	file_ratings = open(os.path.join(settings.BASE_DIR, 'datasets/ratings.csv'))
@@ -13,7 +16,6 @@ try:
 except CParserError as e:
 	print(e)
 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
-
 try:
 	file_movies = open(os.path.join(settings.BASE_DIR, 'datasets/movies.csv'))
 	movies = pd.read_csv(file_movies)
@@ -28,6 +30,12 @@ except CParserError as e:
 	print(e)
 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
 
+try:
+	file_movies_detail = open(os.path.join(settings.BASE_DIR, 'datasets/movies_metadata.csv'))
+	moviedetail = pd.read_csv(file_movies_detail)
+except CParserError as e:
+	print(e)
+	raise formbuilder_core.views.ValidationException('report', 'insufficient')
 
 def index(request):
 	# ratings = pd.read_csv(file_ratings)
@@ -104,12 +112,9 @@ def get_similar(movie_name,rating,corrMatrix):
 		print(e)
 
 def top_movies(request):
-	# ratings = pd.read_csv(file_ratings)
-	# movies = pd.read_csv(file_movies)
-	# links = pd.read_csv(file_links)
-	links_tmdbId = links.drop(['imdbId'],axis=1)
-	# links = 0
 
+
+	links_tmdbId = links.drop(['imdbId'],axis=1)
 	top20MoviesArr = top20Movies(ratings,movies,links)
 	print(top20MoviesArr)
 	
@@ -117,6 +122,99 @@ def top_movies(request):
 	return render(request,"fetchmovie/top_movies.html",{})
 
 def dummy(request):
+
+
+	moviesVar = movies 
+
+	moviedetailVar = moviedetail
+
+	links_small = links
+
+	moviesVar = pd.merge(moviesVar,links_small).drop(['title','imdbId'],axis=1)
+	
+	links_small = links_small[links_small['tmdbId'].notnull()]['tmdbId'].astype('int')
+	
+	moviedetailVar = moviedetailVar.drop([19730, 29503, 35587])
+	
+
+	moviedetailVar['id'] = moviedetailVar['id'].astype('int')
+	smd = moviedetailVar[moviedetailVar['id'].isin(links_small)]
+	smd = smd.drop(['genres'],axis=1)
+
+	smd = moviesVar.merge(smd, left_on='tmdbId', right_on='id')
+
+	smd['genres'] = smd['genres'].fillna('')
+
+	smd_Action = smd[smd['genres'].str.contains('Action')]
+
+	smd_Comedy = smd[smd['genres'].str.contains('Comedy')]
+
+	smd_Horror = smd[smd['genres'].str.contains('Horror')]
+
+	# smd_
+	# print(smd_Action['vote_average'])
+	# print(smd_Comedy['vote_average'])
+	# print(smd_Horror['vote_average'])
+
+	smd_Action = smd_Action.query('vote_average >= 6.5 & vote_count >= 1500')
+
+	smd_Comedy = smd_Comedy.query('vote_average >= 6.5 & vote_count >= 1500')
+
+	smd_Horror = smd_Horror.query('vote_average >= 6.5 & vote_count >= 1500')
+
+	# smd_Action = smd_Action.nlargest(20)
+	smd_Action.sort_values('vote_average', inplace=True, ascending=False)
+
+	smd_Comedy.sort_values('vote_average', inplace=True, ascending=False)
+
+	smd_Horror.sort_values('vote_average', inplace=True, ascending=False)
+
+	smd_Action = smd_Action.head(20)
+
+	smd_Comedy = smd_Comedy.head(20)
+
+	smd_Horror = smd_Horror.head(20)
+
+	smd_Action_json = []
+
+	for obj in smd_Action.iterrows():
+
+		obj[1]['movieId'] = obj[0]
+		jsonVal = obj[1]		
+		# print(type(jsonVal))
+		smd_Action_json.append(jsonVal)
+
+	smd_Comedy_json = []	
+
+	for obj in smd_Comedy.iterrows():
+				
+		obj[1]['movieId'] = obj[0]
+		jsonVal = obj[1]		
+		# print(type(jsonVal))
+		smd_Comedy_json.append(jsonVal)
+
+	smd_Horror_json =[]
+
+	for obj in smd_Comedy.iterrows():
+				
+		obj[1]['movieId'] = obj[0]
+		jsonVal = obj[1]		
+		# print(type(jsonVal))
+		smd_Horror_json.append(jsonVal)	
+		
+
+	my_context ={
+		"action_movie_list": smd_Action_json,
+		"comedy_movie_list": smd_Comedy_json,
+		"horror_movie_list":smd_Horror_json
+	}
+
+	# return HttpResponse("<h1>Hello World homepage()</h1>")
+	return render(request,"fetchmovie/dummy.html", my_context)
+
+ 
+
+def dummy_old(request):
 
 	ratingsVar = ratings
 	moviesVar = movies
@@ -133,7 +231,8 @@ def dummy(request):
 	
 	
 	ratingsVar = pd.merge(movies_links,ratingsVar).drop(['timestamp'],axis=1)
-	# print(type(movies_links))
+	
+
 	userRatings = ratingsVar.pivot_table(index=['genres'],columns=['title'],values='rating')
 	userRatings.head()
 
@@ -150,26 +249,10 @@ def dummy(request):
 	for movie_name in action_movies_arr_final:
 		movies_links_tmdbId = movies_links_new.loc[movie_name,'tmdbId']
 		movie_response = getMovieDetail(movies_links_tmdbId)
+		# movie_response = 'Testing'
 		response_movie_detail.append(movie_response)
 		# print(movie_response)
 	
-	# print(response_movie_detail[0])	
-	
-	# print(action_movies_arr_final)
-	
-	# To fetch response from the api.
-
-	# for val in tmdbId:
-	# 	# print(val)
-	# 	response = requests.get('https://api.themoviedb.org/3/movie/%s?api_key=5fd1f6ffb210aadcdec1444aaea3fc4a' %(val))
-	# 	response_movie_detail = response.json()
-	# 	tmdbId_array.append(response_movie_detail)
-	# 	print(tmdbId_array)
-	# 	i = i + 1
-
-	# response = requests.get('https://api.themoviedb.org/3/movie/%s?api_key=5fd1f6ffb210aadcdec1444aaea3fc4a' %(argID))
-	# response_movie_detail = response.json()
-	# print(response_movie_detail)
 	my_context ={
 		"action_movie_list": response_movie_detail
 	}
@@ -182,35 +265,13 @@ def getMovieDetail(movies_links_tmdbId):
 	# print(response_movie_detail)
 	return response_movie_detail
 
-def getTMDBID():
-	try:
-		links = pd.read_csv(file_links)
-		links_tmdbId = links.drop(['movieId','imdbId'],axis=1)
-		json_data = links_tmdbId.to_json()
-		y = json.loads(json_data)
-		json_object = y['tmdbId']
-		tmdbId_array = list()
-		# print(type(tmdbId_array))
-		i=0
-		val = 0
-		for (k, v) in json_object.items():
-			#print("Key: " + k)
-			val = v
-			tmdbId_array.append(val)
-			#print(val)
-			i = i+1
-		# movie_names_arrays = list(movie_names_keys)
-		return tmdbId_array
-	except Exception as e:
-		print(e)
-		return -1
-
 def floatToInt(val):
 	value = int(val)
 	return value	
 
 
 def top20Movies(ratings,movies,links):
+
 	ratingsVar = ratings
 	moviesVar = movies
 	linksVar = links
@@ -241,11 +302,72 @@ def singleMovieRequest(request):
 		print(my_json)
 		print('- ' * 20)
 		# Load the JSON to a Python list & dump it back out as formatted JSON
-		data = json.loads(my_json)
-		print(type(data))
-		json_data = json.dumps(data, indent=4, sort_keys=True)
-		print(data['adult'])
-		print('- ' * 20)
+		# data = json.loads(my_json)
+		# print(type(data))
+		# json_data = json.dumps(data, indent=4, sort_keys=True)
+		# print(data['adult'])
+		# print('- ' * 20)
 		# print(s)
 
-		return HttpResponse(json_data)
+		return HttpResponse(my_json)
+
+
+
+
+
+
+"""
+	Following functions will fetch data from a specific movie and will store it in a csv file. to find out the 
+	details of each movie.
+"""
+
+
+def getMoviesDetail(request):
+	linksVar = links
+	# print(linksVar)
+	tmdbId = getTMDBID(linksVar)
+	
+	response_movies_objects = []
+	i = 0
+	for tmdb in tmdbId:
+		movieObjects = getMovieDetail(tmdb)
+		response_movies_objects.append(movieObjects)
+		# print(response_movies_objects)
+		i = i +1
+		if i >20:
+			break
+	print(type(response_movies_objects[0]))
+	writeDictToCSV(response_movies_objects)
+	return HttpResponse("<h1>Hello World getMoviesDetail()</h1>")
+
+def getTMDBID(linksVar):
+	try:
+		links_tmdbId = linksVar.drop(['movieId','imdbId'],axis=1)
+		json_data = links_tmdbId.to_json()
+		y = json.loads(json_data)
+		json_object = y['tmdbId']
+		tmdbId_array = list()
+		# print(type(tmdbId_array))
+		i=0
+		val = 0
+		for (k, v) in json_object.items():
+			#print("Key: " + k)
+			val = v
+			tmdbId_array.append(val)
+			#print(val)
+			i = i+1
+		# movie_names_arrays = list(movie_names_keys)
+		# print(len(tmdbId_array))
+		return tmdbId_array
+	except Exception as e:
+		print(e)
+		return -1
+
+
+def writeDictToCSV(movie_objects):
+	# file_movies_detail
+	keys = movie_objects[0].keys()
+	with file_movies_detail as output_file:
+		dict_writer = csv.DictWriter(output_file, keys)
+		dict_writer.writeheader()
+		dict_writer.writerows(movie_objects)

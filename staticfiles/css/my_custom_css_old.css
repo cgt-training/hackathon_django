@@ -1,0 +1,154 @@
+.navbar-default {
+    background-color: #804040;
+    border-color: #804040;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #fff;
+}
+
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+
+#movies {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#movies td, #movies th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#movies tr:nth-child(even){background-color: #f2f2f2;}
+
+#movies tr:hover {background-color: #ddd;}
+
+#movies th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.owl-prev {
+
+  position: absolute;
+  top: 15px;
+  left: -40px;
+}
+
+.owl-next {
+  
+  position: absolute;
+  right: 30px;
+  top: 25px;
+}
+
+.owl-carousel .owl-stage-outer {
+  position: relative;
+  overflow: hidden;
+  -webkit-transform: translate3d(0,0,0);
+  height: 100px;
+}
+
+.fa-chevron-left{
+
+  color:#000000 !important;
+}
+.fa-chevron-right{
+
+  color:#000000 !important;
+}
+.owl-content-div{
+
+  float:left;
+}
+.owl-content-img{
+
+  float:left;
+  width:40px; 
+  height:40px;
+}
+.owl-text-main{
+  float:left;
+  position: relative;
+  height:100px;
+  width: auto;
+}
+.owl-content-text{
+
+  width:110px;
+  /*font-family: 'VISTASANSBOOK1361506783';*/
+  font-size:15px;
+  color:#000000;    
+  position: absolute;
+  top: -5px;
+  left: 25px;
+}
+  
+.owl-content-text-bottom{
+  width:110px;
+  /*font-family: 'VISTASANSBOOK1361506783';*/
+  font-size:15px;
+  color:#000000;   
+  position: absolute;
+  bottom: 37px;
+  left: 25px;
+}
+
+.use-btc-section{
+
+  float:left;
+  width:100%;
+  background-color:#ffffff;
+  padding-top:30px;
+  padding-bottom:30px;
+  height:auto;
+  text-align:center;
+}
+.use-btc-div{
+
+  width:960px;
+  height:auto;
+  display:inline-block;
+}
+.use-btc-upper{
+
+  /*font-family: 'VISTASANSBOOK1361506783';*/
+  font-size:36px;
+  color:#a61380;
+}
+.use-btc-slider{
+
+  margin-top:60px;
+  margin-bottom:30px;
+  width:100%;
+}
+.pink{
+
+  color:#a61380 !important;
+}
+.owl-content-btc-img{
+
+  width:40px;
+  height:40px;
+  display:inline-block;
+}
+.owl-content-btc-text{
+
+  margin-top:15px;
+  margin-bottom:15px;
+  /*font-family: 'VISTASANSBOOK1361506783';*/
+  font-size:15px;
+  color:#a61380;
+}
+.owl-content-btc-p{
+
+  /*font-family: 'VISTASANSBOOK1361506783';*/
+  font-size:12px;
+  color:#666666;  
+}

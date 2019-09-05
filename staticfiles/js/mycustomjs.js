@@ -1,17 +1,17 @@
 $(document).ready(function() {
  
-  $("#owl-example").owlCarousel({
+  $("#owl-btc-example").owlCarousel({
 
   	loop:false,
     margin:10,
     responsiveClass:true,
     nav    : true,
-    navText : ["<i class='fa fa-chevron-left'> </i>","<i class='fa fa-chevron-right'></i>"],
+    navText : ["<i class='fa fa-chevron-left' style='color: #fff;'> </i>","<i class='fa fa-chevron-right' style='color: #fff;'></i>"],
     // navText : ["Previous","Next"],
     autoplay:true,
     autoplayTimeout:3000,
     autoplayHoverPause:true,
-    responsive:{
+    responsive: {
         0:{
 
             items:1,
@@ -30,6 +30,59 @@ $(document).ready(function() {
     }
 
   });
+
+    $("#owl-btc-example2").owlCarousel({
+
+        loop: true,
+        margin: 10,
+        responsiveClass: true,
+        nav: true,
+        navText: ["<i class='fa fa-chevron-left pink pink-left' style='color: #fff;'> </i>", "<i class='fa fa-chevron-right pink' style='color: #fff;'></i>"],
+        responsive: {
+            0: {
+
+                items: 1,
+                loop: true,
+            },
+            600: {
+
+                items: 3,
+                loop: true,
+            },
+            1000: {
+
+                items: 5,
+                loop: true,
+            }
+        }
+    });
+
+    $("#owl-btc-example3").owlCarousel({
+
+        loop: true,
+        margin: 10,
+        responsiveClass: true,
+        nav: true,
+        navText: ["<i class='fa fa-chevron-left pink pink-left'> </i>", "<i class='fa fa-chevron-right pink'></i>"],
+        responsive: {
+            0: {
+
+                items: 1,
+                loop: true,
+            },
+            600: {
+
+                items: 3,
+                loop: true,
+            },
+            1000: {
+
+                items: 5,
+                loop: true,
+            }
+        }
+
+    });
 
 });
 
@@ -59,9 +112,9 @@ var csrftoken = getCookie('csrftoken');
 function sendMovieObject(jsonData){
 
     // var tags = JSON.parse(document.getElementById('tags-data').textContent);
-    
+    console.log(typeof jsonData)
     var str = jsonData;
-    var res = str.replace(/False/g, "false");
+    var res = str.replace(/"/g, "");
     var jsonVal = res.replace(/None/g, 0);
     // console.log(jsonData);
     // console.log(jsonVal);
@@ -70,16 +123,33 @@ function sendMovieObject(jsonData){
     var objVal = "Hello from sendMovieObject()";
     // console.log("Hello from sendMovieObject()");
     $.ajax({
-      type: "POST",
-      url: "moviedetail",
-      headers: {"X-CSRFToken": csrftoken},
-      data: jsonVal,
-      success: function(result){
-        // alert("Success");
-        console.log(result);
-      },
-      failure: function (response) {
-        console.log(response);
-      }
+        type: "POST",
+        url: "moviedetail",
+        headers: {"X-CSRFToken": csrftoken},
+        // data: jsonVal,
+        data: res,
+        success: function(result){
+            // console.log(result)                
+            var json_data = JSON.parse(result);
+            console.log(json_data);
+            // $("#myModal").;
+            showDialog(json_data);
+        },
+        failure: function (response) {
+            console.log(response);
+        }
+    });
+}
+
+function showDialog(result){
+    console.log(result)
+    
+    var movieDialog = document.getElementById('movieDialog');
+    var closeBtn = document.getElementById('closeBtn');
+    var movieTitle = document.getElementById('movieTitle');
+    movieTitle.innerHTML = result.title;    
+    movieDialog.showModal();
+    closeBtn.addEventListener('click', function() {
+        movieDialog.close('animalNotChosen');
     });
 }

@@ -13,12 +13,14 @@
 </head>
 <body>
 	{% include 'fetchmovie/navbar.html' %}
-	<div class="container">
-		{% block content %}
-			replace me
-		{% endblock %}
-		
-		{% load static %}
+	<div class="container-fluid">
+		<div class="row">
+			{% block content %}
+				replace me
+			{% endblock %}
+			
+			{% load static %}
+		</div>
 	</div>	<!-- container -->
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>

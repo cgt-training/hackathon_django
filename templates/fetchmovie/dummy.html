@@ -1,41 +1,92 @@
 {% extends 'fetchmovie/base.html' %}
 {% block content %}
-	<h1>
-		Top 20 Action Movies
-	</h1>
-	<div id="owl-example" class="owl-carousel">
-		{% for row_movie in action_movie_list%}
+	
+	
+    <section class="topActionMovies">
+        <div class="container-fluid">
+        	<div class="row">
+	            <div class="heading">
+	                <h2 class="pull-left">Top Action Movies</h2>
+	                <button class="btn viewAllBtn pull-right">View All</button>
+	            </div>
+	            <div class="clearfix"></div>
+	            <div class="use-btc-slider">
+	                <div id="owl-btc-example" class="owl-carousel">
+	                	{% for row_movie in action_movie_list%}
+		                    <div class="owl-content-btc-div">
+		                        <div class="movieImage">
+		                        {% load static %}
+		                        	<img src="http://image.tmdb.org/t/p/w154/gNJm4egHC4MQVXYY9F3dXoLcNec.jpg" alt="Movie01">
+		                        </div>
+		                        <p class="movieName">{{row_movie.title}}</p>
+		                        <div class="Rating">
+		                            <span class="star">Rating</span>
+		                            <span class="starNumber">{{row_movie.vote_average}}</span>
+		                        </div>
+		                    </div>
+		                {% endfor %} 
+	                </div>
+	            </div>
+	        </div>
+        </div>
+    </section>
 
-			<div class="owl-content-div" onclick="return sendMovieObject('{{ row_movie|escapejs }}')" >
-				<div class="owl-content-img">
-					{% load static %}
-					<img src="{% static 'images/action_movie_icon.png' %}" style="height: 60px;width: 60px;">
-				</div>
-				<div class="owl-text-main">
-					<div class="owl-content-text">
-						{{row_movie.title}}
-					</div>
-					<div class="owl-content-text-bottom">
-						Rating: {{row_movie.vote_average}}
-					</div>
-				</div> <!-- owl-text-main -->   
-			</div>	<!-- owl-content-div -->
-		
-		{% endfor %}
-	</div>
+    <section class="topComedyMovies">
+        <div class="container-fluid">
+        	<div class="row">
+	            <div class="heading">
+	                <h2 class="pull-left">Top Comedy Movies</h2>
+	                <button class="btn viewAllBtn pull-right">View All</button>
+	            </div>
+	            <div class="clearfix"></div>
+	            <div class="use-btc-slider">
+	                <div id="owl-btc-example2" class="owl-carousel">
+	                	{% for row_movie in comedy_movie_list %}
+		                    <div class="owl-content-btc-div">
+		                        <div class="movieImage">
+		                            {% load static %}
+			                        <img src="{% static 'images/movie01.png' %}" alt="Movie01">
+		                        </div>
+		                        <p class="movieName">{{row_movie.title}}</p>
+		                        <div class="Rating">
+		                            <span class="star">Rating</span>
+		                            <span class="starNumber">{{row_movie.vote_average}}</span>
+		                        </div>
+		                    </div>
+		                {% endfor %} 
+	                </div>
+	            </div>
+	        </div>
+        </div>
+    </section>
+
+    <section class="topHorrorMovies">
+        <div class="container-fluid">
+        	<div class="row">
+	            <div class="heading">
+	                <h2 class="pull-left">Top Horror Movies</h2>
+	                <button class="btn viewAllBtn pull-right">View All</button>
+	            </div>
+	            <div class="clearfix"></div>
+	            <div class="use-btc-slider">
+	                <div id="owl-btc-example3" class="owl-carousel">
+	                	{% for row_movie in horror_movie_list %}
+		                    <div class="owl-content-btc-div">
+		                        <div class="movieImage">
+		                            {% load static %}
+			                        <img src="{% static 'images/movie01.png' %}" alt="Movie01">
+		                        </div>
+		                        <p class="movieName">{{row_movie.title}}</p>
+		                        <div class="Rating">
+		                            <span class="star">Rating</span>
+		                            <span class="starNumber">{{row_movie.vote_average}}</span>
+		                        </div>
+		                    </div>
+		                {% endfor %}
+	                </div>
+	            </div>
+	        </div>
+        </div>
+    </section>
+	
 {% endblock %}
-
-<!-- <script type="text/javascript">
-	function sendMovieObject(objVal){
-        
-        $.ajax({
-          type: "POST",
-          url: "{% url 'moviedetail' %}",
-          data: objVal,
-          success: function(result){
-            // alert("Success");
-            console.log(result);
-          }
-        });
-    }
-</script> -->
