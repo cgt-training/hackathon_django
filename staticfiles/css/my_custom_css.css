@@ -182,21 +182,6 @@ p.movieName,
   width: 40%;
 }
 
-/* The Close Button
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-} */
-
 .modalLoginBtn,
 .modalCancelBtn {
   min-width: 100px;
@@ -255,14 +240,99 @@ h3.loginTitle {
   margin-top: 30px;
 }
 
-.owl-prev{
-  position: absolute;
-  top: 150px;
-  left: 0px;
+.profiledp {
+  border-radius: 100%;
+  width: 38px;
+  height: 38px;
+  padding: 0 !important;
+}
+.profiledp a {
+  padding: 20px 0 !important;
+}
+.profiledp img {
+  width: 100%;
 }
 
-.owl-next {
-  position: absolute;
-  top: 150px;
-  right: 0px;
+.movieViews ul {
+  width: auto;
+  margin: 0 -15px;
+  margin-top: 70px;
+}
+
+.movieViews ul li {
+  width: 33.33%;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 55px;
+
+  /* display: inline-block; */
+  float: left;
+}
+
+.listBlock {
+  display: table;
+  width: 100%;
+  min-height: 130px;
+}
+
+.imageLeft {
+  width: 150px;
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 20px;
+}
+.imageLeft img {
+  width: 100%;
+}
+
+.contentRight {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.contentRight .movieName {
+  margin-bottom: 0;
+}
+.contentRight .star,
+.contentRight .starNumber {
+  font-size: 13px;
+}
+
+.rateBtn {
+  border-radius: 0;
+  background-color: transparent;
+  min-width: 80px;
+  height: 30px;
+  line-height: 1;
+  font-size: 13px;
+  color: #ffc400;
+  border: 1px solid #ffc400;
+  text-transform: capitalize;
+  margin-top: 8px;
+}
+.rateBtn:hover,
+.rateBtn:focus,
+.rateBtn:active {
+  color: #ffc400;
+}
+.pplRecommend {
+  color: #929ab3;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.nav-pills > li > a {
+  border-radius: 0;
+  color: #646c83;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-family: "SFUIDisplayBold";
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:focus,
+.nav-pills > li.active > a:hover {
+  color: #000;
+  background-color: #ffc400;
+}
+.nav > li > a {
+  padding: 10px 20px;
 }

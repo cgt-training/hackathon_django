@@ -86,6 +86,79 @@ $(document).ready(function() {
 
 });
 
+
+
+var csrftoken = getCookie('csrftoken');
+
+function showLoginModal(){
+    
+        // Get the modal
+    var modal = document.getElementById("loginModal");
+
+    modal.style.display = "block";
+    modal.style.zIndex = "9";
+    // Get the button that opens the modal
+
+    var btnLogin = document.getElementById("modalLoginBtn");
+
+    // Get the <span> element that closes the modal
+    // var span = document.getElementsByClassName("modalCancelBtn")[0];
+
+    var btnCancel = document.getElementById("modalCancelBtn");
+
+    btnCancel.addEventListener('click', function() {
+        modal.style.display = "none";
+    });
+    var username = document.getElementById("username");
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    btnLogin.addEventListener('click', function() {
+        console.log(username.value);
+        var id = username.value;
+        var res = {"login": id};
+        $.ajax({
+            type: "POST",
+            url: "authentic/login",
+            headers: {"X-CSRFToken": csrftoken},
+            // data: jsonVal,
+            data: res,
+            success: function(result){
+                console.log(result);
+                modal.style.display = "none";
+                // $.redirect("/topmovies", {'arg1': 'value1', 'arg2': 'value2'});
+                window.location.href = "/recommended";                
+                // var json_data = JSON.parse(result);
+                // console.log(json_data);
+                // // $("#myModal").;
+                // showDialog(json_data);
+            },
+            failure: function (response) {
+                console.log(response);
+            }
+        });
+    });
+
+}
+
+
+
+
+/*
+    ****************** ********* ********* ********* ********* ********* ********* *********  
+                        
+                        Not using currently 
+
+    ****************** ********* ********* ********* ********* ********* ********* ********* 
+
+*/
+
+
 function myFunction(obj) {
     console.log(obj);
 }
@@ -106,7 +179,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-var csrftoken = getCookie('csrftoken');
+
 
   
 function sendMovieObject(jsonData){

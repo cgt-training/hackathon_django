@@ -38,15 +38,18 @@ except CParserError as e:
 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
 
 def index(request):
-	# ratings = pd.read_csv(file_ratings)
-	# movies = pd.read_csv(file_movies)
+	
+	session_id = 0
+	if 'id' in request.session:
+		session_id = request.session['id']
+
 	ratingsMovies = ratings
 	ratingsMovies = pd.merge(movies,ratingsMovies).drop(['genres','timestamp'],axis=1)
 	# ratingsMovies_head = ratingsMovies.head(20)
 	#print(ratingsMovies)
 	user_rating = pd.DataFrame()
-	user_rating = ratingsMovies.query('userId == 2')
-	#user_rating = ratingsMovies.query('userId == %s' %(user_id))
+	# user_rating = ratingsMovies.query('userId == 2')
+	user_rating = ratingsMovies.query('userId == %s' %(session_id))
 	size_user_rating = user_rating.shape
 	#print(size_user_rating[0])
 	# Creates a list containing 5 lists, each of 8 items, all set to 0
@@ -81,7 +84,7 @@ def index(request):
 	#similar_movies.head(10)
 	#print(similar_movies)
 	sim_movies_out = similar_movies.sum().sort_values(ascending=False).head(20)
-	print(type(sim_movies_out))
+	# print(type(sim_movies_out))
 	
 	df = sim_movies_out.to_frame()
 	json_data = df.to_json() 
@@ -115,15 +118,19 @@ def top_movies(request):
 
 
 	links_tmdbId = links.drop(['imdbId'],axis=1)
-	top20MoviesArr = top20Movies(ratings,movies,links)
-	print(top20MoviesArr)
+	# top20MoviesArr = top20Movies(ratings,movies,links)
+	# print(top20MoviesArr)
+	# print(links_tmdbId)
 	
 	# return HttpResponse("<h1>Hello World top_Movies</h1>")
 	return render(request,"fetchmovie/top_movies.html",{})
 
 def dummy(request):
 
+	if 'id' in request.session:
+		del request.session['id']
 
+	
 	moviesVar = movies 
 
 	moviedetailVar = moviedetail
@@ -184,6 +191,8 @@ def dummy(request):
 		# print(type(jsonVal))
 		smd_Action_json.append(jsonVal)
 
+	# print(smd_Action_json)
+	
 	smd_Comedy_json = []	
 
 	for obj in smd_Comedy.iterrows():

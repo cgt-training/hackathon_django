@@ -1,7 +1,6 @@
 {% extends 'fetchmovie/base.html' %}
 {% block content %}
 	
-	
     <section class="topActionMovies">
         <div class="container-fluid">
         	<div class="row">
@@ -16,7 +15,9 @@
 		                    <div class="owl-content-btc-div">
 		                        <div class="movieImage">
 		                        {% load static %}
-		                        	<img src="http://image.tmdb.org/t/p/w154/gNJm4egHC4MQVXYY9F3dXoLcNec.jpg" alt="Movie01">
+		                        	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	                   
+		                        		<img src={{image_path}} alt="Movie01">
+		                        	{% endwith %}
 		                        </div>
 		                        <p class="movieName">{{row_movie.title}}</p>
 		                        <div class="Rating">
@@ -45,7 +46,10 @@
 		                    <div class="owl-content-btc-div">
 		                        <div class="movieImage">
 		                            {% load static %}
-			                        <img src="{% static 'images/movie01.png' %}" alt="Movie01">
+		                            {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	                   
+		                        		<img src={{image_path}} alt="Movie01">
+		                        	{% endwith %}
+			                        
 		                        </div>
 		                        <p class="movieName">{{row_movie.title}}</p>
 		                        <div class="Rating">
@@ -74,7 +78,12 @@
 		                    <div class="owl-content-btc-div">
 		                        <div class="movieImage">
 		                            {% load static %}
-			                        <img src="{% static 'images/movie01.png' %}" alt="Movie01">
+
+		                            {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	                   
+		                        		<img src={{image_path}} alt="Movie01">
+		                        	{% endwith %}		                        
+
+
 		                        </div>
 		                        <p class="movieName">{{row_movie.title}}</p>
 		                        <div class="Rating">
