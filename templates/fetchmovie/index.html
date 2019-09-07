@@ -1,21 +1,63 @@
 {% extends 'fetchmovie/base.html' %}
 {% block content %}
-	<h1>Here's top 20 recommended movies for you</h1>
-	<table id="movies">
-		<tr>
-	        <th>Movie Name</th>
-	        <th>Action</th>
-	    </tr>
-		{% for row_movie in movie_list%}
-		<tr>
-			<td>
-				{{row_movie}}
-			</td>
-			<td>
-				<button><i class="fa fa-edit"></i> Click For Detail</button>
-			</td>
-		</tr>
-		{% endfor %}
-	</table>
+	
+	<div class="container-fluid">
+        <ul class="nav nav-pills pull-left">
+            <li role="presentation" class="active"><a href="#">top 20</a></li>
+        	{% for genre in user_genre_list %}    
+            	<li role="presentation"><a href="/topmovies">{{genre}}</a></li>
+        	{% endfor %}    
+        </ul>
+        <ul class="list-inline pull-right">
+            <li>
+                <span>Sort By: </span>
+            </li>
+            <li></li>
+            <li class="sortingBtns">
+                <div class='switch'>
+                    <div class='quality'>
+                        <input checked id='q1' name='q' type='radio' value='q1'>
+                        <label for='q1'>Hindi</label>
+                    </div>
+                    <div class='quality'>
+                        <input id='q2' name='q' type='radio' value='q2'>
+                        <label for='q2'>English</label>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+	
+    <section class="movieViews">
+        <div class="container-fluid">
+            <ul class="list-inline">
+                {% for row_movie in movie_list%}
+                    <li>
+                        <div class="listBlock">
+                            <div class="imageLeft">
+                                {% load static %}
+            {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}                       
+                                        <img src={{image_path}} alt="Movie01">
+                                    {% endwith %}
+                            </div>
+                            <div class="contentRight">
+                                <p class="movieName">{{row_movie.name}}</p>
+                                <div class="Rating">
+                                    <span class="star">Rating</span>
+                                    <span class="starNumber">{{row_movie.vote_average}}</span>
+                                </div>
+                                <div class="pplRecommend">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    <span class="grayText">{{row_movie.vote_count}} people recommended</span>
+                                </div>
+                                <button class="btn rateBtn">Rate This Movie</button>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+    
 {% endblock %}
 
