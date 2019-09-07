@@ -43,7 +43,8 @@ def index(request):
 	
 	session_id = 0
 	if 'firstCall' not in request.session:
-		user_genre_li = getUserSpecificGenre(request, request.session['id'])		
+		user_genre_li = getUserSpecificGenre(request, request.session['id'])
+		request.session['user_genre'] = user_genre_li
 	if 'id' in request.session:
 		session_id = request.session['id']
 
@@ -240,7 +241,9 @@ def getUserSpecificGenre(request, userId_P):
 
 def top_movies(request):
 
-	print(user_genre_li)
+	genre_li = request.session['user_genre']
+	print('---------TOP Movies--------------------')
+	print(genre_li)
 	# links_tmdbId = links.drop(['imdbId'],axis=1)
 	
 	return render(request,"fetchmovie/top_movies.html",{})
@@ -251,6 +254,8 @@ def dummy(request):
 		del request.session['id']
 	if 'firstCall' in request.session:
 		del request.session['firstCall']
+	if 'user_genre' in request.session:
+		del request.session['user_genre']
 	
 	moviesVar = movies 
 
