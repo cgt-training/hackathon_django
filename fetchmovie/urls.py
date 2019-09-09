@@ -9,3 +9,5 @@ urlpatterns = [
     path('moviedetail', views.singleMovieRequest, name='moviedetail'),
     path('createdataset', views.getMoviesDetail, name='createdataset')
 ]
+
+

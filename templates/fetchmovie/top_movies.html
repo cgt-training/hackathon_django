@@ -2,5 +2,60 @@
 {% block content %}
 	
 	<h1>Top Movies</h1>
-	
+
+
+	<div class="view-page">
+	<h1>{{result.original_title}}</h1>
+	<hr>
+	<div class="movie-div">
+		<div class="movie-image">
+			<img src="https://image.tmdb.org/t/p/w500{{result.poster_path}}" alt="" />
+		</div>
+	</div>
+	<div class="content-div">
+		<div class="rating">
+			<p>RATING</p>
+			<div class="stars">
+				<div class="stars-in"> </div>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+		<div class="description">
+			<div class="desc-group">
+				<div class="desc-heading">Title : </div>
+				<div class="desc-content">{{moviedetail.original_title}}</div>
+			</div>
+			<div class="desc-group">
+				<div class="desc-heading">Tag Line : </div>
+				<div class="desc-content">{{moviedetail.tagline}}</div>
+			</div>
+			<div class="desc-group">
+				<div class="desc-heading">Released on : </div>
+				<div class="desc-content">{{moviedetail.release_date}}</div>
+			</div>
+			<div class="desc-group">
+				<div class="desc-heading">Overview : </div>
+				<div class="desc-content">{{moviedetail.overview}}</div>
+			</div>
+			<div class="desc-group">
+				<div class="desc-heading">Genres : </div>
+				<div class="desc-content">{{genres}}</div>
+			</div>
+			<div class="desc-group">
+				<div class="desc-heading">Language : </div>
+				<div class="desc-content">{{moviedetail.original_language}}</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<!-- 
+	<div>
+		{{moviedetail}}
+	</div>
+		<div>
+		{{genres}}
+	</div> -->
+
 {% endblock %}

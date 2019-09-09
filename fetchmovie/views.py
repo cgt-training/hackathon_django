@@ -8,7 +8,7 @@ from django.shortcuts import render
 import requests
 import numpy as np
 import csv
-
+import ast
 
 try:
 	file_ratings = open(os.path.join(settings.BASE_DIR, 'datasets/ratings.csv'))
@@ -168,8 +168,8 @@ def get_similar(movie_name,rating,corrMatrix):
 		return similar_ratings
 	except Exception as e:
 		# return ['continue', -50]
-		# print(e)
-		print('')
+		print(e)
+		
 
 def getUserSpecificGenre(request, userId_P):
 	request.session['firstCall'] = 'called'
@@ -240,13 +240,34 @@ def getUserSpecificGenre(request, userId_P):
 
 
 def top_movies(request):
+	movieIdParam = float(request.GET["movieId"])
+	tmdbId = int(movieIdParam)
+	# print(movieIdParam)
+	moviedetailVar = moviedetail
 
-	genre_li = request.session['user_genre']
-	print('---------TOP Movies--------------------')
-	print(genre_li)
+	# genre_li = request.session['user_genre']
+	# print('---------TOP Movies--------------------')
+	# print(genre_li)
 	# links_tmdbId = links.drop(['imdbId'],axis=1)
+
+	metaRow = moviedetailVar.loc[moviedetailVar.id == str(tmdbId)]
+	metaRow = metaRow.to_dict('records')
+
+	genresStr = metaRow[0]['genres']
+	json_data = ast.literal_eval(genresStr)
 	
-	return render(request,"fetchmovie/top_movies.html",{})
+	#genres1 = json_data#json.dumps(json_data)
+	genres = ""
+	for genre in json_data:
+		genres = genres + genre['name'] + '| '
+
+	my_context ={
+		# "movie_list": movie_names_arrays,
+		"moviedetail": metaRow[0],
+		"genres" : genres
+	}
+		
+	return render(request,"fetchmovie/top_movies.html",my_context)
 
 def dummy(request):
 
@@ -336,8 +357,7 @@ def dummy(request):
 		jsonVal = obj[1]		
 		# print(type(jsonVal))
 		smd_Horror_json.append(jsonVal)	
-		
-
+	print(smd_Action_json)
 	my_context ={
 		"action_movie_list": smd_Action_json,
 		"comedy_movie_list": smd_Comedy_json,
@@ -348,6 +368,71 @@ def dummy(request):
 	return render(request,"fetchmovie/dummy.html", my_context)
 
  
+
+"""
+	Following functions will fetch data from a specific movie and will store it in a csv file. to find out the 
+	details of each movie.
+"""
+
+
+def getMoviesDetail(request):
+	linksVar = links
+	# print(linksVar)
+	tmdbId = getTMDBID(linksVar)
+	
+	response_movies_objects = []
+	i = 0
+	for tmdb in tmdbId:
+		movieObjects = getMovieDetail1(tmdb)
+		response_movies_objects.append(movieObjects)
+		# print(response_movies_objects)
+		i = i +1
+		if i >20:
+			break
+	print(type(response_movies_objects[0]))
+	writeDictToCSV(response_movies_objects)
+	return HttpResponse("<h1>Hello World getMoviesDetail()</h1>")
+
+def getTMDBID(linksVar):
+	try:
+		links_tmdbId = linksVar.drop(['movieId','imdbId'],axis=1)
+		json_data = links_tmdbId.to_json()
+		y = json.loads(json_data)
+		json_object = y['tmdbId']
+		tmdbId_array = list()
+		# print(type(tmdbId_array))
+		i=0
+		val = 0
+		for (k, v) in json_object.items():
+			#print("Key: " + k)
+			val = v
+			tmdbId_array.append(val)
+			#print(val)
+			i = i+1
+		# movie_names_arrays = list(movie_names_keys)
+		# print(len(tmdbId_array))
+		return tmdbId_array
+	except Exception as e:
+		print(e)
+		return -1
+
+
+def writeDictToCSV(movie_objects):
+	# file_movies_detail
+	keys = movie_objects[0].keys()
+	with file_movies_detail as output_file:
+		dict_writer = csv.DictWriter(output_file, keys)
+		dict_writer.writeheader()
+		dict_writer.writerows(movie_objects)
+
+
+"""
+	********************************************************************************************************
+								These functions are not used currently.	
+	********************************************************************************************************
+"""
+
+
 
 def dummy_old(request):
 
@@ -445,64 +530,3 @@ def singleMovieRequest(request):
 		# print(s)
 
 		return HttpResponse(my_json)
-
-
-
-
-
-
-"""
-	Following functions will fetch data from a specific movie and will store it in a csv file. to find out the 
-	details of each movie.
-"""
-
-
-def getMoviesDetail(request):
-	linksVar = links
-	# print(linksVar)
-	tmdbId = getTMDBID(linksVar)
-	
-	response_movies_objects = []
-	i = 0
-	for tmdb in tmdbId:
-		movieObjects = getMovieDetail1(tmdb)
-		response_movies_objects.append(movieObjects)
-		# print(response_movies_objects)
-		i = i +1
-		if i >20:
-			break
-	print(type(response_movies_objects[0]))
-	writeDictToCSV(response_movies_objects)
-	return HttpResponse("<h1>Hello World getMoviesDetail()</h1>")
-
-def getTMDBID(linksVar):
-	try:
-		links_tmdbId = linksVar.drop(['movieId','imdbId'],axis=1)
-		json_data = links_tmdbId.to_json()
-		y = json.loads(json_data)
-		json_object = y['tmdbId']
-		tmdbId_array = list()
-		# print(type(tmdbId_array))
-		i=0
-		val = 0
-		for (k, v) in json_object.items():
-			#print("Key: " + k)
-			val = v
-			tmdbId_array.append(val)
-			#print(val)
-			i = i+1
-		# movie_names_arrays = list(movie_names_keys)
-		# print(len(tmdbId_array))
-		return tmdbId_array
-	except Exception as e:
-		print(e)
-		return -1
-
-
-def writeDictToCSV(movie_objects):
-	# file_movies_detail
-	keys = movie_objects[0].keys()
-	with file_movies_detail as output_file:
-		dict_writer = csv.DictWriter(output_file, keys)
-		dict_writer.writeheader()
-		dict_writer.writerows(movie_objects)

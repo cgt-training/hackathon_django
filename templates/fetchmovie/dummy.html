@@ -15,8 +15,9 @@
 		                    <div class="owl-content-btc-div">
 		                        <div class="movieImage">
 		                        {% load static %}
-		                        	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	                   
-		                        		<img src={{image_path}} alt="Movie01">
+		                        	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	<a href="/topmovies?movieId={{row_movie.tmdbId}}">                   
+		                        			<img src={{image_path}} alt="Movie01">
+		                        		</a>
 		                        	{% endwith %}
 		                        </div>
 		                        <p class="movieName">{{row_movie.title}}</p>
@@ -47,7 +48,9 @@
 		                        <div class="movieImage">
 		                            {% load static %}
 		                            {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	                   
-		                        		<img src={{image_path}} alt="Movie01">
+		                        		<a href="/topmovies?movieId={{row_movie.tmdbId}}">
+		                        			<img src={{image_path}} alt="Movie01">
+		                        		</a>
 		                        	{% endwith %}
 			                        
 		                        </div>
