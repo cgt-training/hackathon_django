@@ -1,21 +1,22 @@
 {% extends 'fetchmovie/base.html' %}
 {% block content %}
 	
-    <section class="topActionMovies">
+	<section class="topActionMovies">
         <div class="container-fluid">
         	<div class="row">
 	            <div class="heading">
-	                <h2 class="pull-left">Top Action Movies</h2>
+	                <h2 class="pull-left">Top {{genre.0}} Movies</h2>
 	                <button class="btn viewAllBtn pull-right">View All</button>
 	            </div>
 	            <div class="clearfix"></div>
 	            <div class="use-btc-slider">
 	                <div id="owl-btc-example" class="owl-carousel">
-	                	{% for row_movie in action_movie_list%}
+	                	{% for row_movie in moviesArr.0 %}
 		                    <div class="owl-content-btc-div">
 		                        <div class="movieImage">
 		                        {% load static %}
-		                        	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	<a href="/topmovies?movieId={{row_movie.tmdbId}}">                   
+		                       	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	
+		                       		<a href="/topmovies?movieId={{row_movie.tmdbId}}">                   
 		                        			<img src={{image_path}} alt="Movie01">
 		                        		</a>
 		                        	{% endwith %}
@@ -31,28 +32,27 @@
 	            </div>
 	        </div>
         </div>
-    </section>
+	</section>
 
-    <section class="topComedyMovies">
+	<section class="topActionMovies">
         <div class="container-fluid">
         	<div class="row">
 	            <div class="heading">
-	                <h2 class="pull-left">Top Comedy Movies</h2>
+	                <h2 class="pull-left">Top {{genre.1}} Movies</h2>
 	                <button class="btn viewAllBtn pull-right">View All</button>
 	            </div>
 	            <div class="clearfix"></div>
 	            <div class="use-btc-slider">
 	                <div id="owl-btc-example2" class="owl-carousel">
-	                	{% for row_movie in comedy_movie_list %}
+	                	{% for row_movie in moviesArr.1 %}
 		                    <div class="owl-content-btc-div">
 		                        <div class="movieImage">
-		                            {% load static %}
-		                            {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	                   
-		                        		<a href="/topmovies?movieId={{row_movie.tmdbId}}">
+		                        {% load static %}
+		                       	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	
+		                       		<a href="/topmovies?movieId={{row_movie.tmdbId}}">                   
 		                        			<img src={{image_path}} alt="Movie01">
 		                        		</a>
 		                        	{% endwith %}
-			                        
 		                        </div>
 		                        <p class="movieName">{{row_movie.title}}</p>
 		                        <div class="Rating">
@@ -65,28 +65,27 @@
 	            </div>
 	        </div>
         </div>
-    </section>
+	</section>
 
-    <section class="topHorrorMovies">
+    <section class="topActionMovies">
         <div class="container-fluid">
         	<div class="row">
 	            <div class="heading">
-	                <h2 class="pull-left">Top Horror Movies</h2>
+	                <h2 class="pull-left">Top {{genre.2}} Movies</h2>
 	                <button class="btn viewAllBtn pull-right">View All</button>
 	            </div>
 	            <div class="clearfix"></div>
 	            <div class="use-btc-slider">
 	                <div id="owl-btc-example3" class="owl-carousel">
-	                	{% for row_movie in horror_movie_list %}
+	                	{% for row_movie in moviesArr.2 %}
 		                    <div class="owl-content-btc-div">
 		                        <div class="movieImage">
-		                            {% load static %}
-
-		                            {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	                   
-		                        		<img src={{image_path}} alt="Movie01">
-		                        	{% endwith %}		                        
-
-
+		                        {% load static %}
+		                       	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	
+		                       		<a href="/topmovies?movieId={{row_movie.tmdbId}}">                   
+		                        			<img src={{image_path}} alt="Movie01">
+		                        		</a>
+		                        	{% endwith %}
 		                        </div>
 		                        <p class="movieName">{{row_movie.title}}</p>
 		                        <div class="Rating">
@@ -94,11 +93,78 @@
 		                            <span class="starNumber">{{row_movie.vote_average}}</span>
 		                        </div>
 		                    </div>
-		                {% endfor %}
+		                {% endfor %} 
 	                </div>
 	            </div>
 	        </div>
         </div>
-    </section>
+	</section>
+    
+    <section class="topActionMovies">
+        <div class="container-fluid">
+        	<div class="row">
+	            <div class="heading">
+	                <h2 class="pull-left">Top {{genre.3}} Movies</h2>
+	                <button class="btn viewAllBtn pull-right">View All</button>
+	            </div>
+	            <div class="clearfix"></div>
+	            <div class="use-btc-slider">
+	                <div id="owl-btc-example4" class="owl-carousel">
+	                	{% for row_movie in moviesArr.3 %}
+		                    <div class="owl-content-btc-div">
+		                        <div class="movieImage">
+		                        {% load static %}
+		                       	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	
+		                       		<a href="/topmovies?movieId={{row_movie.tmdbId}}">                   
+		                        			<img src={{image_path}} alt="Movie01">
+		                        		</a>
+		                        	{% endwith %}
+		                        </div>
+		                        <p class="movieName">{{row_movie.title}}</p>
+		                        <div class="Rating">
+		                            <span class="star">Rating</span>
+		                            <span class="starNumber">{{row_movie.vote_average}}</span>
+		                        </div>
+		                    </div>
+		                {% endfor %} 
+	                </div>
+	            </div>
+	        </div>
+        </div>
+	</section>
 	
+	<section class="topActionMovies">
+        <div class="container-fluid">
+        	<div class="row">
+	            <div class="heading">
+	                <h2 class="pull-left">Top {{genre.4}} Movies</h2>
+	                <button class="btn viewAllBtn pull-right">View All</button>
+	            </div>
+	            <div class="clearfix"></div>
+	            <div class="use-btc-slider">
+	                <div id="owl-btc-example5" class="owl-carousel">
+	                	{% for row_movie in moviesArr.4 %}
+		                    <div class="owl-content-btc-div">
+		                        <div class="movieImage">
+		                        {% load static %}
+		                       	{% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}	
+		                       		<a href="/topmovies?movieId={{row_movie.tmdbId}}">                   
+		                        			<img src={{image_path}} alt="Movie01">
+		                        		</a>
+		                        	{% endwith %}
+		                        </div>
+		                        <p class="movieName">{{row_movie.title}}</p>
+		                        <div class="Rating">
+		                            <span class="star">Rating</span>
+		                            <span class="starNumber">{{row_movie.vote_average}}</span>
+		                        </div>
+		                    </div>
+		                {% endfor %} 
+	                </div>
+	            </div>
+	        </div>
+        </div>
+	</section>
+
 {% endblock %}
+

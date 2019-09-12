@@ -84,6 +84,60 @@ $(document).ready(function() {
 
     });
 
+    $("#owl-btc-example4").owlCarousel({
+
+        loop: true,
+        margin: 10,
+        responsiveClass: true,
+        nav: true,
+        navText: ["<i class='fa fa-chevron-left pink pink-left'> </i>", "<i class='fa fa-chevron-right pink'></i>"],
+        responsive: {
+            0: {
+
+                items: 1,
+                loop: true,
+            },
+            600: {
+
+                items: 3,
+                loop: true,
+            },
+            1000: {
+
+                items: 5,
+                loop: true,
+            }
+        }
+
+    });
+
+    $("#owl-btc-example5").owlCarousel({
+
+        loop: true,
+        margin: 10,
+        responsiveClass: true,
+        nav: true,
+        navText: ["<i class='fa fa-chevron-left pink pink-left'> </i>", "<i class='fa fa-chevron-right pink'></i>"],
+        responsive: {
+            0: {
+
+                items: 1,
+                loop: true,
+            },
+            600: {
+
+                items: 3,
+                loop: true,
+            },
+            1000: {
+
+                items: 5,
+                loop: true,
+            }
+        }
+
+    });
+
 });
 
 
@@ -226,3 +280,33 @@ function showDialog(result){
         movieDialog.close('animalNotChosen');
     });
 }
+
+
+$(".rateBtn").click(function(){
+    movieid = $(this).attr('movieid');
+    $("#rateThisMovieId").val(movieid)
+    $("#rateModal").modal();
+});
+
+$("#modalRateBtn").click(function(){
+    $.ajax({
+        type: "POST",
+        url: "authentic/login",
+        headers: {"X-CSRFToken": csrftoken},
+        // data: jsonVal,
+        data: res,
+        success: function(result){
+            console.log(result);
+            modal.style.display = "none";
+            // $.redirect("/topmovies", {'arg1': 'value1', 'arg2': 'value2'});
+            window.location.href = "/recommended";                
+            // var json_data = JSON.parse(result);
+            // console.log(json_data);
+            // // $("#myModal").;
+            // showDialog(json_data);
+        },
+        failure: function (response) {
+            console.log(response);
+        }
+    });
+});

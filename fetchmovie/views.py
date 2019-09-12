@@ -1,14 +1,25 @@
 from django.http import HttpResponse
+from django.shortcuts import render
+
 import pandas as pd
 import warnings; warnings.simplefilter('ignore')
 import os
 import json
 from django.conf import settings
-from django.shortcuts import render
 import requests
 import numpy as np
 import csv
 import ast
+
+from datetime import *
+
+
+try:
+	special_days = open(os.path.join(settings.BASE_DIR, 'datasets/special_days.csv'))
+	movie_day = pd.read_csv(special_days)
+except CParserError as e:
+	print(e)
+	raise formbuilder_core.views.ValidationException('report', 'insufficient')
 
 try:
 	file_ratings = open(os.path.join(settings.BASE_DIR, 'datasets/ratings.csv'))
@@ -37,16 +48,26 @@ except CParserError as e:
 	print(e)
 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
 
+
 user_genre_li = []
 
 def index(request):
 	
 	session_id = 0
+	all_genre = ['Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Drama', 'Fantasy', 'FilmNoir', 'Horror', 'IMAX', 'Musical', 'Mystery', 
+	'Romance', 'SciFi', 'Thriller', 'War', 'Western']
 	if 'firstCall' not in request.session:
 		user_genre_li = getUserSpecificGenre(request, request.session['id'])
 		request.session['user_genre'] = user_genre_li
+	else:
+		user_genre_li = request.session['user_genre']
 	if 'id' in request.session:
 		session_id = request.session['id']
+
+	# using list comprehension to perform task 
+	all_genre = [i for i in all_genre if i not in user_genre_li]	
+	print(all_genre)
+	request.session['all_genre'] = all_genre
 
 	# print(user_genre_li)
 	ratingsMovies = ratings
@@ -114,7 +135,8 @@ def index(request):
 		# "movie_list": movie_names_arrays,
 		"movie_list": movie_detail_array,
 		"number_movie": 20,
-		"user_genre_list": user_genre_li
+		"user_genre_list": user_genre_li,
+		"remaining_genre": all_genre
 	}
 	#return HttpResponse("<a href='/movies/dummy'>Hello, world. index.</a>")
 	
@@ -239,7 +261,8 @@ def getUserSpecificGenre(request, userId_P):
 	return final_genres_list
 
 
-def top_movies(request):
+def moviesDetail(request):
+
 	movieIdParam = float(request.GET["movieId"])
 	tmdbId = int(movieIdParam)
 	# print(movieIdParam)
@@ -267,7 +290,8 @@ def top_movies(request):
 		"genres" : genres
 	}
 		
-	return render(request,"fetchmovie/top_movies.html",my_context)
+	return render(request,"fetchmovie/movies_detail.html",my_context)
+
 
 def dummy(request):
 
@@ -299,75 +323,217 @@ def dummy(request):
 
 	smd['genres'] = smd['genres'].fillna('')
 
+
+
 	smd_Action = smd[smd['genres'].str.contains('Action')]
+
+	smd_Adventure = smd[smd['genres'].str.contains('Adventure')]
+
+	smd_Animation = smd[smd['genres'].str.contains('Animation')]
+
+	smd_Children = smd[smd['genres'].str.contains('Children')]
 
 	smd_Comedy = smd[smd['genres'].str.contains('Comedy')]
 
+	smd_Crime = smd[smd['genres'].str.contains('Crime')]
+
+	smd_Drama = smd[smd['genres'].str.contains('Drama')]
+
+	smd_Fantasy = smd[smd['genres'].str.contains('Fantasy')]
+
+	smd_FilmNoir = smd[smd['genres'].str.contains('Film-Noir')]
+
 	smd_Horror = smd[smd['genres'].str.contains('Horror')]
 
-	# smd_
-	# print(smd_Action['vote_average'])
-	# print(smd_Comedy['vote_average'])
-	# print(smd_Horror['vote_average'])
+	smd_IMAX = smd[smd['genres'].str.contains('IMAX')]
 
-	smd_Action = smd_Action.query('vote_average >= 6.5 & vote_count >= 1500')
+	smd_Musical = smd[smd['genres'].str.contains('Musical')]
 
-	smd_Comedy = smd_Comedy.query('vote_average >= 6.5 & vote_count >= 1500')
+	smd_Mystery = smd[smd['genres'].str.contains('Mystery')]
 
-	smd_Horror = smd_Horror.query('vote_average >= 6.5 & vote_count >= 1500')
+	smd_Romance = smd[smd['genres'].str.contains('Romance')]
 
-	# smd_Action = smd_Action.nlargest(20)
-	smd_Action.sort_values('vote_average', inplace=True, ascending=False)
+	smd_SciFi = smd[smd['genres'].str.contains('Sci-Fi')]
 
-	smd_Comedy.sort_values('vote_average', inplace=True, ascending=False)
+	smd_Thriller = smd[smd['genres'].str.contains('Thriller')]
 
-	smd_Horror.sort_values('vote_average', inplace=True, ascending=False)
+	smd_War = smd[smd['genres'].str.contains('War')]
 
-	smd_Action = smd_Action.head(20)
+	smd_Western = smd[smd['genres'].str.contains('Western')]
 
-	smd_Comedy = smd_Comedy.head(20)
+	mean_Action = smd_Action['vote_average'].mean()
+	mean_Adventure = smd_Adventure['vote_average'].mean()
+	mean_Animation = smd_Animation['vote_average'].mean()
+	mean_Children = smd_Children['vote_average'].mean()
+	mean_Comedy = smd_Comedy['vote_average'].mean()
+	mean_Crime = smd_Crime['vote_average'].mean()
+	mean_Drama = smd_Drama['vote_average'].mean()
+	mean_Fantasy = smd_Fantasy['vote_average'].mean()
+	mean_FilmNoir = smd_FilmNoir['vote_average'].mean()
+	mean_Horror = smd_Horror['vote_average'].mean()
+	mean_IMAX = smd_IMAX['vote_average'].mean()
+	mean_Musical = smd_Musical['vote_average'].mean()
+	mean_Mystery = smd_Mystery['vote_average'].mean()
+	mean_Romance = smd_Romance['vote_average'].mean()
+	mean_SciFi = smd_SciFi['vote_average'].mean()
+	mean_Thriller = smd_Thriller['vote_average'].mean()
+	mean_War = smd_War['vote_average'].mean()
+	mean_Western = smd_Western['vote_average'].mean()
 
-	smd_Horror = smd_Horror.head(20)
+	array_meanObj = [
+		{'smd_Action': smd_Action, 'mean': mean_Action},
+		{'smd_Adventure': smd_Adventure, 'mean': mean_Adventure},
+		{'smd_Animation': smd_Animation, 'mean': mean_Animation},
+		{'smd_Children': smd_Children, 'mean': mean_Children},
+		{'smd_Comedy': smd_Comedy, 'mean': mean_Comedy},
+		{'smd_Crime': smd_Crime, 'mean': mean_Crime},
+		{'smd_Drama': smd_Drama, 'mean': mean_Drama},
+		{'smd_Fantasy': smd_Fantasy, 'mean': mean_Fantasy},
+		{'smd_FilmNoir': smd_FilmNoir, 'mean': mean_FilmNoir},
+		{'smd_Horror': smd_Horror, 'mean': mean_Horror},
+		{'smd_IMAX': smd_IMAX, 'mean': mean_IMAX},
+		{'smd_Musical': smd_Musical, 'mean': mean_Musical},
+		{'smd_Mystery': smd_Mystery, 'mean': mean_Mystery},
+		{'smd_Romance': smd_Romance, 'mean': mean_Romance},
+		{'smd_SciFi': smd_SciFi, 'mean': mean_SciFi},
+		{'smd_Thriller': smd_Thriller, 'mean': mean_Thriller},
+		{'smd_War': smd_War, 'mean': mean_War},
+		{'smd_Western': smd_Western, 'mean': mean_Western}
+	]
 
-	smd_Action_json = []
+	quantile_Action = smd_Action['vote_count'].quantile(0.9)
+	quantile_Adventure = smd_Adventure['vote_count'].quantile(0.9)
+	quantile_Animation = smd_Animation['vote_count'].quantile(0.9)
+	quantile_Children = smd_Children['vote_count'].quantile(0.9)
+	quantile_Comedy = smd_Comedy['vote_count'].quantile(0.9)
+	quantile_Crime = smd_Crime['vote_count'].quantile(0.9)
+	quantile_Drama = smd_Drama['vote_count'].quantile(0.9)
+	quantile_Fantasy = smd_Fantasy['vote_count'].quantile(0.9)
+	quantile_FilmNoir = smd_FilmNoir['vote_count'].quantile(0.9)
+	quantile_Horror = smd_Horror['vote_count'].quantile(0.9)
+	quantile_IMAX = smd_IMAX['vote_count'].quantile(0.9)
+	quantile_Musical = smd_Musical['vote_count'].quantile(0.9)
+	quantile_Mystery = smd_Mystery['vote_count'].quantile(0.9)
+	quantile_Romance = smd_Romance['vote_count'].quantile(0.9)
+	quantile_SciFi = smd_SciFi['vote_count'].quantile(0.9)
+	quantile_Thriller = smd_Thriller['vote_count'].quantile(0.9)
+	quantile_War = smd_War['vote_count'].quantile(0.9)
+	quantile_Western = smd_Western['vote_count'].quantile(0.9)
 
-	for obj in smd_Action.iterrows():
 
-		obj[1]['movieId'] = obj[0]
-		jsonVal = obj[1]		
-		# print(type(jsonVal))
-		smd_Action_json.append(jsonVal)
+	array_meanObj = [
+		{'smd_Action': smd_Action, 'mean': mean_Action, 'quantile':quantile_Action},
+		{'smd_Adventure': smd_Adventure, 'mean': mean_Adventure, 'quantile':quantile_Adventure},
+		{'smd_Animation': smd_Animation, 'mean': mean_Animation, 'quantile':quantile_Animation},
+		{'smd_Children': smd_Children, 'mean': mean_Children, 'quantile':quantile_Children},
+		{'smd_Comedy': smd_Comedy, 'mean': mean_Comedy, 'quantile':quantile_Comedy},
+		{'smd_Crime': smd_Crime, 'mean': mean_Crime, 'quantile':quantile_Crime},
+		{'smd_Drama': smd_Drama, 'mean': mean_Drama, 'quantile':quantile_Drama},
+		{'smd_Fantasy': smd_Fantasy, 'mean': mean_Fantasy, 'quantile':quantile_Fantasy},
+		{'smd_FilmNoir': smd_FilmNoir, 'mean': mean_FilmNoir, 'quantile':quantile_FilmNoir},
+		{'smd_Horror': smd_Horror, 'mean': mean_Horror, 'quantile':quantile_Horror},
+		{'smd_IMAX': smd_IMAX, 'mean': mean_IMAX, 'quantile':quantile_IMAX},
+		{'smd_Musical': smd_Musical, 'mean': mean_Musical, 'quantile':quantile_Musical},
+		{'smd_Mystery': smd_Mystery, 'mean': mean_Mystery, 'quantile':quantile_Mystery},
+		{'smd_Romance': smd_Romance, 'mean': mean_Romance, 'quantile':quantile_Romance},
+		{'smd_SciFi': smd_SciFi, 'mean': mean_SciFi, 'quantile':quantile_SciFi},
+		{'smd_Thriller': smd_Thriller, 'mean': mean_Thriller, 'quantile':quantile_Thriller},
+		{'smd_War': smd_War, 'mean': mean_War, 'quantile':quantile_War},
+		{'smd_Western': smd_Western, 'mean': mean_Western, 'quantile':quantile_Western}
+	]
 
-	# print(smd_Action_json)
+
+	final_genres_array=[]
+	key_array_final = []
+	for obj in array_meanObj:
+		if obj['mean'] >= 6.0 and obj['quantile'] > 2000.0:
+			key_array = []
+			for key in obj.keys(): 
+				key_array.append(key)
+			# print(key_array[0])
+			key_array_final.append(key_array[0])
+			final_genres_array.append(obj)
+
+
+	index = 0
+
+	final_movies_with_detail = []
+
+	for obj in final_genres_array:
+		# print(key_array_final[index])
+		keyName = key_array_final[index]
+		df2 = obj[keyName]
+		mean = obj['mean']
+		quantile = obj['quantile']
+		q_movies = df2.copy().loc[df2['vote_count'] >= quantile]
+		# print(q_movies.shape)
+
+		# Define a new feature 'score' and calculate its value with `weighted_rating()`
+		q_movies['score'] = q_movies.apply(weighted_rating, args=(quantile,mean) ,axis=1) 
+
+		#Sort movies based on score calculated above
+		q_movies = q_movies.sort_values('score', ascending=False)
+
+		#Print the top 15 movies
+		# print(q_movies.head(20))
+		q_movies = q_movies.head(20)
+		# print(type(keyName))
+		keyName = keyName.replace('smd_', '')
+		obj = {
+			'genre': keyName,
+			'movies': q_movies
+		}
+		final_movies_with_detail.append(obj)
+		index = index+1
+		
+	# print(final_movies_with_detail['movies'])
+
+	moviesArr = []
+	genreArr = []
+	lengthArr = []
+	num = len(final_movies_with_detail)
+	for i in range(num):
+		lengthArr.append(i)
+	for obj in final_movies_with_detail:
+		movieD = obj['movies']
+		genreD = obj['genre']
+		moviesArr.append(movieD)
+		genreArr.append(genreD)
+	# print(len(moviesArr))
+	print(type(moviesArr[0]))
 	
-	smd_Comedy_json = []	
+	final_movies_json_arr = []
+	
+	for i in range(num):
 
-	for obj in smd_Comedy.iterrows():
-				
-		obj[1]['movieId'] = obj[0]
-		jsonVal = obj[1]		
-		# print(type(jsonVal))
-		smd_Comedy_json.append(jsonVal)
+		smd_Action_json = []
 
-	smd_Horror_json =[]
+		for obj in moviesArr[i].iterrows():
 
-	for obj in smd_Comedy.iterrows():
-				
-		obj[1]['movieId'] = obj[0]
-		jsonVal = obj[1]		
-		# print(type(jsonVal))
-		smd_Horror_json.append(jsonVal)	
-	print(smd_Action_json)
-	my_context ={
-		"action_movie_list": smd_Action_json,
-		"comedy_movie_list": smd_Comedy_json,
-		"horror_movie_list":smd_Horror_json
+			obj[1]['movieId'] = obj[0]
+			jsonVal = obj[1]		
+			# print(type(jsonVal))
+			smd_Action_json.append(jsonVal)
+		final_movies_json_arr.append(smd_Action_json)	
+
+
+	my_context = {
+		'moviesArr': final_movies_json_arr,
+		'genre': genreArr,
+		'size': lengthArr
 	}
 
 	# return HttpResponse("<h1>Hello World homepage()</h1>")
 	return render(request,"fetchmovie/dummy.html", my_context)
 
- 
+
+
+def weighted_rating(x, m, C):
+    v = x['vote_count']
+    R = x['vote_average']
+    # Calculation based on the IMDB formula
+    return (v/(v+m) * R) + (m/(m+v) * C)
+
 
 """
 	Following functions will fetch data from a specific movie and will store it in a csv file. to find out the 
@@ -392,6 +558,7 @@ def getMoviesDetail(request):
 	print(type(response_movies_objects[0]))
 	writeDictToCSV(response_movies_objects)
 	return HttpResponse("<h1>Hello World getMoviesDetail()</h1>")
+
 
 def getTMDBID(linksVar):
 	try:
@@ -426,64 +593,20 @@ def writeDictToCSV(movie_objects):
 		dict_writer.writerows(movie_objects)
 
 
+
+
+
+
+
+
+
+
 """
 	********************************************************************************************************
 								These functions are not used currently.	
 	********************************************************************************************************
 """
 
-
-
-def dummy_old(request):
-
-	ratingsVar = ratings
-	moviesVar = movies
-	linksVar = links
-	
-	movies_links = pd.merge(moviesVar,linksVar).drop(['imdbId'],axis=1)
-	movies_links_new = pd.DataFrame()
-	# movies_links = movies_links.set_index(['title'])
-	# movies_links = movies_links.drop(['movieId'],axis=1)
-	movies_links_new = movies_links
-	# movie_links = movies_links.set_index(['title'],inplace=True)
-	movies_links_new = movies_links_new.drop(['movieId'],axis=1)
-	movies_links_new.set_index("title",inplace=True)
-	
-	
-	ratingsVar = pd.merge(movies_links,ratingsVar).drop(['timestamp'],axis=1)
-	
-
-	userRatings = ratingsVar.pivot_table(index=['genres'],columns=['title'],values='rating')
-	userRatings.head()
-
-	#userRatings = userRatings.fillna(0,axis=1)
-	# print(userRatings)
-	action_movies = userRatings.loc["Action"]
-	action_movies_arr = action_movies.dropna()
-	action_movies_arr = action_movies_arr.nlargest(5)
-	action_movies_arr_index = action_movies_arr.index
-	action_movies_arr_final = action_movies_arr_index.tolist()
-
-	response_movie_detail = []
-	i = 0
-	for movie_name in action_movies_arr_final:
-		movies_links_tmdbId = movies_links_new.loc[movie_name,'tmdbId']
-		movie_response = getMovieDetail1(movies_links_tmdbId)
-		# movie_response = 'Testing'
-		response_movie_detail.append(movie_response)
-		# print(movie_response)
-	
-	my_context ={
-		"action_movie_list": response_movie_detail
-	}
-	return render(request,"fetchmovie/dummy.html", my_context)
-
-
-def getMovieDetail1(movies_links_tmdbId):
-	response = requests.get('https://api.themoviedb.org/3/movie/%s?api_key=5fd1f6ffb210aadcdec1444aaea3fc4a' %(movies_links_tmdbId))
-	response_movie_detail = response.json()
-	# print(response_movie_detail)
-	return response_movie_detail
 
 def floatToInt(val):
 	value = int(val)
@@ -530,3 +653,53 @@ def singleMovieRequest(request):
 		# print(s)
 
 		return HttpResponse(my_json)
+
+
+
+"""
+	********************************************************************************************************
+							Movie of the day functions	
+	********************************************************************************************************
+"""
+
+
+def movieDay(request):
+	# session_id = 0
+	# if 'id' in request.session:
+	# 	session_id = request.session['id']
+
+	movie_day_var = movie_day
+	moviedetailVar = moviedetail
+	#movie_day
+	# today = datetime.today()
+
+	# my_date = "2019-09-11"
+
+	datem = datetime.now().strftime('%m') +'-' +datetime.now().strftime('%d')
+
+	date_var = movie_day_var[movie_day_var['date'].str.contains(str(datem))==True].head(1).values
+	
+	print(date_var)
+	tag_value = date_var[0][2]
+	
+	mov_details= ''
+	
+	tag_data = moviedetailVar[moviedetailVar['overview'].str.contains(tag_value)==True].head(1)
+
+	movie_id = int(tag_data.id)
+
+	mov_details = getMovieDetailMovieDay(movie_id)
+	
+	print(type(mov_details))	  
+	myData ={
+		"moviedetail": mov_details
+	}
+
+	return render(request,"fetchmovie/movieOfTheDay.html", myData)
+
+
+def getMovieDetailMovieDay(movies_links_tmdbId):
+	response = requests.get('https://api.themoviedb.org/3/movie/%s?api_key=5fd1f6ffb210aadcdec1444aaea3fc4a' %(movies_links_tmdbId))
+	response_movie_detail = response.json()
+	# print(response_movie_detail)
+	return response_movie_detail

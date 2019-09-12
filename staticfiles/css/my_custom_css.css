@@ -8,6 +8,15 @@
 }
 
 @font-face {
+  font-family: "SFUIDisplayMedium";
+  src: url("../fonts/SFUIDisplayMedium.eot");
+  src: url("../fonts/SFUIDisplayMedium.eot") format("embedded-opentype"),
+    url("../fonts/SFUIDisplayMedium.woff2") format("woff2"), url("../fonts/SFUIDisplayMedium.woff") format("woff"),
+    url("../fonts/SFUIDisplayMedium.ttf") format("truetype"),
+    url("../fonts/SFUIDisplayMedium.svg#SFUIDisplayMedium") format("svg");
+}
+
+@font-face {
   font-family: "SFUIDisplayRegular";
   src: url("../fonts/SFUIDisplayRegular.eot");
   src: url("../fonts/SFUIDisplayRegular.eot") format("embedded-opentype"),
@@ -23,11 +32,13 @@
 }
 body {
   background-color: #090f21;
-  font-family: "SFUIDisplayRegular";
 }
 .container-fluid {
   padding-left: 25px;
   padding-right: 25px;
+}
+.list-inline {
+  margin-left: 0;
 }
 .logoImg {
   max-width: 205px;
@@ -57,9 +68,7 @@ body {
   font-size: 15px;
   color: #fff;
   text-transform: uppercase;
-  font-family: "SFUIDisplayRegular";
-  padding-left: 0;
-  padding-right: 0;
+  padding: 13px 0;
 }
 
 .navbar-nav > li.active {
@@ -105,30 +114,66 @@ body {
 }
 .viewAllBtn {
   display: table-cell;
-  min-width: 95px;
-  min-height: 40px;
+  min-width: 100px;
+  padding: 8px 12px;
   line-height: 1;
   color: #ffc400;
   padding-top: 10px;
   font-size: 14px;
   text-transform: uppercase;
   border-radius: 20px;
-  border: 1px solid #222738;
+  border: 2px solid #222738;
   background-color: transparent;
-  font-family: "SFUIDisplayRegular";
   vertical-align: middle;
   margin-top: 20px;
   margin-bottom: 30px;
+  font-family: "SFUIDisplayMedium";
+  letter-spacing: 0.5px;
 }
 .viewAllBtn:hover,
 .viewAllBtn:focus,
 .viewAllBtn:active {
-  color: #fff;
+  color: #ffc400;
   outline: 0;
+  border-color: #ffc400;
 }
+
+/* Side Arrows of slider */
+.owl-carousel {
+  position: relative;
+  padding-bottom: 75px;
+}
+.owl-nav {
+  position: absolute;
+  bottom: 45px;
+  width: 100%;
+}
+.owl-prev {
+  position: absolute;
+  left: 46.5%;
+  z-index: 9999;
+  background-color: #ffc400;
+  color: #000;
+  padding: 10px 15px 8px 12px;
+  border-radius: 100%;
+}
+.owl-next {
+  position: absolute;
+  right: 46.5%;
+  z-index: 9999;
+  background-color: #ffc400;
+  color: #000;
+  padding: 10px 12px 8px 15px;
+  border-radius: 100%;
+}
+.owl-nav .fa {
+  font-size: 15px;
+  line-height: 1;
+}
+
 .movieImage {
-  max-width: 198px;
-  height: 300px;
+  max-width: 100%;
+  height: auto;
   margin-bottom: 12px;
   overflow-y: hidden;
 }
@@ -140,6 +185,7 @@ p.movieName,
   color: #fff;
   font-size: 18px;
   line-height: 1.5;
+  letter-spacing: 0.5px;
 }
 /* .owl-item {
   max-width: 213px !important;
@@ -147,11 +193,6 @@ p.movieName,
 
 .owl-content-btc-div {
   margin-right: 15px;
-}
-.starNumber {
-  font-size: 14px;
-  color: #929ab3;
-  padding-left: 4px;
 }
 .use-btc-slider {
   position: relative;
@@ -176,14 +217,16 @@ p.movieName,
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
-  margin: 6% auto 0;
+  margin: auto;
   padding: 30px;
   border: 1px solid #888;
   width: 40%;
 }
 
 .modalLoginBtn,
-.modalCancelBtn {
+.modalCancelBtn,
+.modalCancelBtn2,
+.modalCancelBtn3 {
   min-width: 100px;
   min-height: 42px;
   text-align: center;
@@ -206,13 +249,29 @@ p.movieName,
 .modalCancelBtn,
 .modalCancelBtn:hover,
 .modalCancelBtn:focus,
-.modalCancelBtn:active {
+.modalCancelBtn:active,
+.modalCancelBtn2,
+.modalCancelBtn2:hover,
+.modalCancelBtn2:focus,
+.modalCancelBtn2:active,
+.modalCancelBtn3,
+.modalCancelBtn3:hover,
+.modalCancelBtn3:focus,
+.modalCancelBtn3:active {
   background-color: #e6e6e6;
   outline: 0;
 }
 
 h3.loginTitle {
   font-size: 30px;
+  text-align: center;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-family: "SFUIDisplayBold";
+}
+h4.loginTitle {
+  font-size: 24px;
   text-align: center;
   line-height: 1;
   margin-top: 0;
@@ -293,10 +352,6 @@ h3.loginTitle {
 .contentRight .movieName {
   margin-bottom: 0;
 }
-.contentRight .star,
-.contentRight .starNumber {
-  font-size: 13px;
-}
 
 .rateBtn {
   border-radius: 0;
@@ -318,21 +373,323 @@ h3.loginTitle {
 .pplRecommend {
   color: #929ab3;
   font-size: 13px;
-  margin-top: 4px;
+  margin: 10px 0 2px;
+  display: table;
+  width: 100%;
 }
 .nav-pills > li > a {
   border-radius: 0;
-  color: #646c83;
+  /* color: #646c83; */
+  color: #ffc400;
   font-size: 15px;
   text-transform: uppercase;
-  font-family: "SFUIDisplayBold";
+  font-family: "SFUIDisplayMedium";
+}
+.nav > li > a:focus,
+.nav > li > a:hover {
+  background-color: rgba(255, 255, 255, 0.6);
 }
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:focus,
 .nav-pills > li.active > a:hover {
   color: #000;
   background-color: #ffc400;
+  font-family: "SFUIDisplayBold";
 }
 .nav > li > a {
   padding: 10px 20px;
+}
+/*----------Sorting Buttons---------*/
+
+.sortingBtns .switch {
+  position: relative;
+  margin: 0;
+  width: 140px;
+  height: 40px;
+  color: #646c83;
+  font-size: 14px;
+  border-radius: 25px;
+}
+
+.sortingBtns .quality {
+  position: relative;
+  display: inline-block;
+  width: 48%;
+  float: left;
+  height: 100%;
+  line-height: 36px;
+}
+.sortingBtns .quality:first-child label {
+  border-radius: 22px 0 0 22px;
+  border: 2px solid #646c83;
+  border-right: 0;
+}
+.sortingBtns .quality:last-child label {
+  border-radius: 0 22px 22px 0;
+  border: 2px solid #646c83;
+  border-left: 0;
+}
+.sortingBtns .quality label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  text-align: center;
+  line-height: 36px;
+  transition: transform 0.4s, color 0.4s, background-color 0.4s;
+}
+.sortingBtns .quality input[type="radio"] {
+  appearance: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.sortingBtns .quality input[type="radio"]:focus {
+  outline: 0;
+  outline-offset: 0;
+}
+.sortingBtns .quality input[type="radio"]:checked ~ label {
+  background-color: #ffc400;
+  color: #111;
+  border: 0;
+  padding: 2px 0 0;
+}
+.sortingBtns .quality.qualityModal input[type="radio"]:checked ~ label {
+  background-color: #000;
+  color: #fff;
+  border: 0;
+  padding: 2px 0 0;
+}
+.sortingBtns .quality input[type="radio"]:active ~ label {
+  transform: scale(1.05);
+}
+
+/*----------Sorting Buttons---------*/
+h4.loginTitle {
+  font-size: 24px;
+  text-align: center;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-family: "SFUIDisplayBold";
+}
+
+/* Star Rating */
+.Rating {
+  display: table;
+  width: 100%;
+  margin: 8px 0 6px;
+}
+.rating-static {
+  width: 60px;
+  height: 16px;
+  display: table-cell;
+  background: url("../images/star.png") 0 0 no-repeat;
+  cursor: pointer;
+}
+.rating-50 {
+  background-position: 0 0;
+}
+.rating-40 {
+  background-position: -12px 0;
+}
+.rating-30 {
+  background-position: -24px 0;
+}
+.rating-20 {
+  background-position: -36px 0;
+}
+.rating-10 {
+  background-position: -48px 0;
+}
+.rating-0 {
+  background-position: -60px 0;
+}
+
+.rating-5 {
+  background-position: -48px -16px;
+}
+.rating-15 {
+  background-position: -36px -16px;
+}
+.rating-25 {
+  background-position: -24px -16px;
+}
+.rating-35 {
+  background-position: -12px -16px;
+}
+.rating-45 {
+  background-position: 0 -16px;
+}
+.starNumber {
+  font-size: 14px;
+  color: #929ab3;
+  padding-left: 10px;
+  line-height: 1;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/* Custom Word Checkbox */
+ul.genreUL {
+  margin: 0 auto;
+  width: 85%;
+  text-align: center;
+}
+li.handsCare {
+  padding: 0;
+  max-width: inherit;
+}
+
+li.handsCare input {
+  padding: 20px 13px;
+}
+
+li.handsCare input[type="checkbox"]:checked + .userInfo {
+  color: #fff;
+  border-color: #000000;
+  background-color: #000;
+}
+
+li.handsCare input[type="checkbox"] {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  left: 30px;
+  text-align: center;
+  opacity: 0;
+}
+
+li.handsCare .userInfo {
+  text-transform: uppercase;
+  padding: 6px 15px;
+  border-radius: 70px;
+  border: 2px solid #333;
+  text-align: center;
+  font-size: 13px;
+  margin: 0 2px 8px;
+  line-height: 20px;
+  color: #333;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-family: "SFUIDisplayRegular";
+}
+
+.pplRecommend .fa-user {
+  display: table-cell;
+  vertical-align: middle;
+}
+span.grayText {
+  display: table-cell;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Breadcrumbs */
+ol.breadcrumb {
+  padding: 10px 0;
+  list-style: none;
+  background-color: transparent;
+}
+
+/* Display list items side by side */
+ol.breadcrumb li {
+  display: inline;
+  font-size: 16px;
+  font-family: "SFUIDisplayMedium";
+  line-height: 1;
+  text-transform: uppercase;
+}
+ol.breadcrumb > .active {
+  color: #ffc400;
+}
+ol.breadcrumb li a {
+  font-size: 16px;
+  font-family: "SFUIDisplayMedium";
+  color: #ffffff;
+  line-height: 1;
+  text-decoration: underline;
+}
+
+ol.breadcrumb li a:hover,
+ol.breadcrumb li a:focus,
+ol.breadcrumb li a:active {
+  color: #ffc400;
+}
+
+.breadcrumb > li + li:before {
+  padding: 0 4px;
+  content: "\00BB";
+  font-size: 15px;
+  color: #ffc400;
+}
+
+.overview {
+  margin: 20px 0;
+}
+h2.descHeading {
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 20px;
+  font-family: "SFUIDisplayMedium";
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.overview p {
+  margin: 0;
+  color: #fff;
+  margin-bottom: 18px;
+  font-size: 16px;
+  font-family: "SFUIDisplayRegular";
+  line-height: 1.6;
+}
+
+.moviesVideo ul {
+  margin: 10px -10px 0;
+}
+.moviesVideo ul li {
+  width: 25%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 25px;
+  float: left;
+}
+.moviesVideo ul li iframe {
+  width: 100%;
+  height: 300px;
+  float: left;
+}
+.movieName.movieDescName {
+  font-size: 24px;
+}
+.title {
+  text-transform: uppercase;
+  color: #ffffff;
+  font-size: 17px;
+  font-family: "SFUIDisplayMedium";
+  line-height: 1.7;
+  text-align: left;
+}
+.description {
+  color: #ffffff;
+  font-size: 15px;
+  font-family: "SFUIDisplayRegular";
+  line-height: 1.4;
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+@media screen and (min-width: 1599px) {
+  img.moviePoster {
+    width: 90%;
+  }
+  .description {
+    margin-bottom: 50px;
+  }
+  .moviesVideo ul li iframe {
+    height: 400px;
+  }
 }

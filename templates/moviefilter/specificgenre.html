@@ -1,0 +1,68 @@
+{% extends 'fetchmovie/base.html' %}
+	{% block content %}
+
+		<div class="container-fluid">
+	        <ul class="nav nav-pills pull-left">
+	            <li role="presentation" class="active"><a href="/recommended">top 20</a></li>
+	        	{% for genre in user_genre_li %}    
+	            	<li role="presentation"><a href="/filtermovie?genre={{genre}}">{{genre}}</a></li>
+	        	{% endfor %}    
+	        	<li class="dropdown">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More <span class="caret"></span></a>
+	                <ul class="dropdown-menu">
+		                {% for genre in remaining_genre %}
+		                    <li><a href="/filtermovie?genre={{genre}}">{{genre}}</a></li>
+		                {% endfor %}
+	                </ul>
+            	</li>    
+	        </ul>
+	        <ul class="list-inline pull-right">
+	            <li class="sortingBtns">
+	                <div class='switch'>
+	                    <div class='quality'>
+	                        <input checked id='y1' name='q' type='radio' value='q1'>
+	                        <label for='y1'><a href="/movieoftheday">Today<a></label>
+	                    </div>
+	                    <div class='quality'>
+	                        <input id='y2' name='q' type='radio' value='q2'>
+	                        <label for='y2'>Mood</label>
+	                    </div>
+	                </div>
+	            </li>
+	        </ul>
+    	</div>
+
+    	<section class="movieViews">
+	        <div class="container-fluid">
+	            <ul class="list-inline">
+	                {% for row_movie in final_movie_data%}
+	                    <li>
+	                        <div class="listBlock">
+	                            <div class="imageLeft">
+	                                {% load static %}
+	           {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}
+	           			<a href="/topmovies?movieId={{row_movie.id}}">                      
+                            <img src={{image_path}} alt="Movie01">
+                        </a>                       
+	           {% endwith %}
+	                            </div>
+	                            <div class="contentRight">
+	                                <p class="movieName">{{row_movie.name}}</p>
+	                                <div class="Rating">
+	                                    <span class="star">Rating</span>
+	                                    <span class="starNumber">{{row_movie.vote_average}}</span>
+	                                </div>
+	                                <div class="pplRecommend">
+	                                    <i class="fa fa-user" aria-hidden="true"></i>
+	                                    <span class="grayText">{{row_movie.vote_count}} people recommended</span>
+	                                </div>
+	                                <button class="btn rateBtn" movieid="{{row_movie.id}}">Rate This Movie</button>
+	                            </div>
+	                        </div>
+	                    </li>
+	                {% endfor %}
+	            </ul>
+	        </div>
+    	</section>
+
+	{% endblock %}

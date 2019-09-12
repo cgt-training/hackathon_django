@@ -19,5 +19,10 @@ from django.urls import include, path
 urlpatterns = [
 	path('', include('fetchmovie.urls')),
 	path('authentic/', include('authentication.urls')),
+    path('filtermovie/', include('moviefilter.urls')),
+    path('movieoftheday/', include('movieoftheday.urls')),
+    path('recommended/', include('collabFiltering.urls')),
     path('admin/', admin.site.urls),
 ]
+
+

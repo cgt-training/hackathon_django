@@ -1,0 +1,103 @@
+{% extends 'fetchmovie/base.html' %}
+{% block content %}
+	
+    <!-- Breadcrumbs -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <ol class="breadcrumb">
+                    {% if request.session.id %}
+                        <li><a href="/recommended">Back</a></li>
+                    {% else %}
+                        <li><a href="/">Back</a></li>
+                    {% endif %}
+                    <li class="active">{{moviedetail.title}}</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-lg-2">
+                {% load static %}
+            	{% with image_path="http://image.tmdb.org/t/p/w154"|add:moviedetail.poster_path %}	
+            		<img src={{image_path}} alt="Movie01">
+            	{% endwith %}
+            </div>
+            <div class="col-md-9 col-lg-10">
+                <p class="movieName movieDescName">{{moviedetail.title}}</p>
+                <div class="Rating">
+                    <span class="rating-static rating-25"></span>
+                    <span class="starNumber">{{moviedetail.vote_average}}</span>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="title">Genre</div>
+                        <div class="description">{{moviedetail.genres}}</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="title">Release Date</div>
+                        <div class="description">{{moviedetail.release_date}}</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="title">Box Office</div>
+                        <div class="description">Rs. {{moviedetail.revenue}}</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="title">Language</div>
+                        <div class="description">{{moviedetail.spoken_languages}}</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="title">Runtime</div>
+                        <div class="description">{{moviedetail.runtime}}</div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="title">Homepage</div>
+                        <div class="description"><a href="{{moviedetail.homepage}}">Click Here</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="overview">
+                    <h2 class="descHeading">Overview</h2>
+                    <p>
+                    	{{moviedetail.overview}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="moviesVideo">
+                    <h2 class="descHeading">
+                    	Video
+                    </h2>
+                    <ul class="list-inline ">
+                        <li>
+                            <iframe height="345" src="https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1">
+                            </iframe>
+                        </li>
+                        <li>
+                            <iframe height="345" src="https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1">
+                            </iframe>
+                        </li>
+                        <li>
+                            <iframe height="345" src="https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1">
+                            </iframe>
+                        </li>
+                        <li>
+                            <iframe height="345" src="https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1">
+                            </iframe>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

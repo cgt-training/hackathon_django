@@ -1,154 +1,338 @@
+@font-face {
+  font-family: "SFUIDisplayBold";
+  src: url("../fonts/SFUIDisplayBold.eot");
+  src: url("../fonts/SFUIDisplayBold.eot") format("embedded-opentype"),
+    url("../fonts/SFUIDisplayBold.woff2") format("woff2"), url("../fonts/SFUIDisplayBold.woff") format("woff"),
+    url("../fonts/SFUIDisplayBold.ttf") format("truetype"),
+    url("../fonts/SFUIDisplayBold.svg#SFUIDisplayBold") format("svg");
+}
+
+@font-face {
+  font-family: "SFUIDisplayRegular";
+  src: url("../fonts/SFUIDisplayRegular.eot");
+  src: url("../fonts/SFUIDisplayRegular.eot") format("embedded-opentype"),
+    url("../fonts/SFUIDisplayRegular.woff2") format("woff2"), url("../fonts/SFUIDisplayRegular.woff") format("woff"),
+    url("../fonts/SFUIDisplayRegular.ttf") format("truetype"),
+    url("../fonts/SFUIDisplayRegular.svg#SFUIDisplayRegular") format("svg");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #090f21;
+  font-family: "SFUIDisplayRegular";
+}
+.container-fluid {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.logoImg {
+  max-width: 205px;
+}
 .navbar-default {
-    background-color: #804040;
-    border-color: #804040;
+  background-color: #090f21;
+  /* border-color: #090f21; */
+  /* border-color: #ffffff; */
+  border: 0;
+  border-radius: 0;
+  min-height: 100px;
+}
+.navbar-right {
+  border-bottom: 1px solid #222738;
+}
+.navbar-nav > li {
+  padding: 18px 15px 14px;
+  margin-left: 8px;
+  margin-right: 8px;
+  border-bottom: 2px solid transparent;
+}
+.navbar-nav > li:last-child {
+  margin-right: 0;
+}
+.menuheader .navbar-nav > li > a {
+  line-height: 1;
+  font-size: 15px;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: "SFUIDisplayRegular";
+  padding-left: 0;
+  padding-right: 0;
 }
 
-.navbar-default .navbar-nav>li>a {
-    color: #fff;
+.navbar-nav > li.active {
+  border-bottom: 2px solid #ffc400;
+}
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+  color: #ffffee;
 }
 
-.navbar-default .navbar-brand {
-    color: #fff;
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+  color: #ffc400;
+  background-color: transparent;
 }
 
-#movies {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
+.loginBtn a {
+  min-width: 100px;
+  min-height: 42px;
+  text-align: center;
+  color: #000000 !important;
+  font-size: 16px;
+  font-family: "SFUIDisplayBold" !important;
+  background-color: #ffc400;
+}
+.loginBtn a:hover,
+.loginBtn a:focus,
+.loginBtn a:active {
+  background-color: #ffc400 !important;
+}
+
+.heading {
+  display: table;
+  width: 100%;
+}
+.heading h2 {
+  display: table-cell;
+  font-family: "SFUIDisplayBold";
+  margin-bottom: 30px;
+  font-size: 34px;
+  color: #ffffff;
+}
+.viewAllBtn {
+  display: table-cell;
+  min-width: 95px;
+  min-height: 40px;
+  line-height: 1;
+  color: #ffc400;
+  padding-top: 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  border: 1px solid #222738;
+  background-color: transparent;
+  font-family: "SFUIDisplayRegular";
+  vertical-align: middle;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.viewAllBtn:hover,
+.viewAllBtn:focus,
+.viewAllBtn:active {
+  color: #fff;
+  outline: 0;
+}
+.movieImage {
+  max-width: 198px;
+  height: 300px;
+  margin-bottom: 12px;
+  overflow-y: hidden;
+}
+.movieImage img {
+  width: 100%;
+}
+p.movieName,
+.star {
+  color: #fff;
+  font-size: 18px;
+  line-height: 1.5;
+}
+/* .owl-item {
+  max-width: 213px !important;
+} */
+
+.owl-content-btc-div {
+  margin-right: 15px;
+}
+.starNumber {
+  font-size: 14px;
+  color: #929ab3;
+  padding-left: 4px;
+}
+.use-btc-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(255, 255, 255, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 6% auto 0;
+  padding: 30px;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+.modalLoginBtn,
+.modalCancelBtn {
+  min-width: 100px;
+  min-height: 42px;
+  text-align: center;
+  color: #000000 !important;
+  font-size: 16px;
+  font-family: "SFUIDisplayBold" !important;
+  background-color: #ffc400;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.modalLoginBtn:hover,
+.modalLoginBtn:focus,
+.modalLoginBtn:active {
+  background-color: #ffc400;
+  outline: 0;
+}
+.modalCancelBtn,
+.modalCancelBtn:hover,
+.modalCancelBtn:focus,
+.modalCancelBtn:active {
+  background-color: #e6e6e6;
+  outline: 0;
+}
+
+h3.loginTitle {
+  font-size: 30px;
+  text-align: center;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-family: "SFUIDisplayBold";
+}
+.modal-content label {
+  font-size: 15px;
+  line-height: 1;
+  color: #000000;
+  margin-bottom: 8px;
+}
+.form-control {
+  border-radius: 0;
+  min-height: 46px;
+  font-size: 14px;
+}
+
+.modal-content input::placeholder {
+  font-size: 14px;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.profiledp {
+  border-radius: 100%;
+  width: 38px;
+  height: 38px;
+  padding: 0 !important;
+}
+.profiledp a {
+  padding: 20px 0 !important;
+}
+.profiledp img {
   width: 100%;
 }
 
-#movies td, #movies th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-#movies tr:nth-child(even){background-color: #f2f2f2;}
-
-#movies tr:hover {background-color: #ddd;}
-
-#movies th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
-}
-
-.owl-prev {
-
-  position: absolute;
-  top: 15px;
-  left: -40px;
-}
-
-.owl-next {
-  
-  position: absolute;
-  right: 30px;
-  top: 25px;
-}
-
-.owl-carousel .owl-stage-outer {
-  position: relative;
-  overflow: hidden;
-  -webkit-transform: translate3d(0,0,0);
-  height: 100px;
-}
-
-.fa-chevron-left{
-
-  color:#000000 !important;
-}
-.fa-chevron-right{
-
-  color:#000000 !important;
-}
-.owl-content-div{
-
-  float:left;
-}
-.owl-content-img{
-
-  float:left;
-  width:40px; 
-  height:40px;
-}
-.owl-text-main{
-  float:left;
-  position: relative;
-  height:100px;
+.movieViews ul {
   width: auto;
-}
-.owl-content-text{
-
-  width:110px;
-  /*font-family: 'VISTASANSBOOK1361506783';*/
-  font-size:15px;
-  color:#000000;    
-  position: absolute;
-  top: -5px;
-  left: 25px;
-}
-  
-.owl-content-text-bottom{
-  width:110px;
-  /*font-family: 'VISTASANSBOOK1361506783';*/
-  font-size:15px;
-  color:#000000;   
-  position: absolute;
-  bottom: 37px;
-  left: 25px;
+  margin: 0 -15px;
+  margin-top: 70px;
 }
 
-.use-btc-section{
+.movieViews ul li {
+  width: 33.33%;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 55px;
 
-  float:left;
-  width:100%;
-  background-color:#ffffff;
-  padding-top:30px;
-  padding-bottom:30px;
-  height:auto;
-  text-align:center;
+  /* display: inline-block; */
+  float: left;
 }
-.use-btc-div{
 
-  width:960px;
-  height:auto;
-  display:inline-block;
+.listBlock {
+  display: table;
+  width: 100%;
+  min-height: 130px;
 }
-.use-btc-upper{
 
-  /*font-family: 'VISTASANSBOOK1361506783';*/
-  font-size:36px;
-  color:#a61380;
+.imageLeft {
+  width: 150px;
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 20px;
 }
-.use-btc-slider{
-
-  margin-top:60px;
-  margin-bottom:30px;
-  width:100%;
+.imageLeft img {
+  width: 100%;
 }
-.pink{
 
-  color:#a61380 !important;
+.contentRight {
+  display: table-cell;
+  vertical-align: middle;
 }
-.owl-content-btc-img{
 
-  width:40px;
-  height:40px;
-  display:inline-block;
+.contentRight .movieName {
+  margin-bottom: 0;
 }
-.owl-content-btc-text{
-
-  margin-top:15px;
-  margin-bottom:15px;
-  /*font-family: 'VISTASANSBOOK1361506783';*/
-  font-size:15px;
-  color:#a61380;
+.contentRight .star,
+.contentRight .starNumber {
+  font-size: 13px;
 }
-.owl-content-btc-p{
 
-  /*font-family: 'VISTASANSBOOK1361506783';*/
-  font-size:12px;
-  color:#666666;  
+.rateBtn {
+  border-radius: 0;
+  background-color: transparent;
+  min-width: 80px;
+  height: 30px;
+  line-height: 1;
+  font-size: 13px;
+  color: #ffc400;
+  border: 1px solid #ffc400;
+  text-transform: capitalize;
+  margin-top: 8px;
+}
+.rateBtn:hover,
+.rateBtn:focus,
+.rateBtn:active {
+  color: #ffc400;
+}
+.pplRecommend {
+  color: #929ab3;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.nav-pills > li > a {
+  border-radius: 0;
+  color: #646c83;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-family: "SFUIDisplayBold";
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:focus,
+.nav-pills > li.active > a:hover {
+  color: #000;
+  background-color: #ffc400;
+}
+.nav > li > a {
+  padding: 10px 20px;
 }
