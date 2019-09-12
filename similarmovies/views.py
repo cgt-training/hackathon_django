@@ -60,39 +60,13 @@ except CParserError as e:
 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
 
 
-def filterOnGenre(request):
 
-	genreParam = request.GET["genre"]
+def simMovies(request):
+
+	movieParam = 'Iron Man'
 	user_genre_li = request.session['user_genre']
 	all_genre = request.session['all_genre']
-	session_id = 0
-	if 'id' in request.session:
-		session_id = request.session['id']
-	print(genreParam)
-	smd = filterCSVOnGenre(request, genreParam)
-	
-	print(smd.empty)
-
-	if smd.empty:
-		mycontext ={
-			'final_movie_data':[],
-			'user_genre_li': user_genre_li,
-			'remaining_genre': all_genre		
-		}
-
-		return render(request,"moviefilter/specificgenre.html",mycontext)
-
-	smd_small_movieId =  smd['movieId']
-
-	smd_data = UserMoviesWithRating(request, smd_small_movieId, smd, session_id)
-	
-	top_rated_movie_by_user = smd_data['top_rated_movie_by_user']
-	user_movies_to_remove = smd_data['user_movies_to_remove']
-
-	smd = removeMoviesUserWatched(request, smd, user_movies_to_remove)
-
-	print('&&&&&&&&&&----------&&&&&&&&&&----------')
-	
+	smd = trainCSV(request)	
 	features = ['cast', 'crew', 'keywords']
 	
 	for feature in features:
@@ -138,9 +112,9 @@ def filterOnGenre(request):
 	# print(indices)
 	
 	similar_movies_Array = []
-	for movieN in top_rated_movie_by_user:
-		similar_movies = get_recommendations(movieN, cosine_sim2, indices, smd) 
-		similar_movies_Array.append(similar_movies.values)
+	
+	similar_movies = get_recommendations(movieParam, cosine_sim2, indices, smd) 
+	similar_movies_Array.append(similar_movies.values)
 
 	# print(similar_movies_Array)
 
@@ -148,8 +122,7 @@ def filterOnGenre(request):
 
 	final_movie_data = getMovieDetailWithName(similar_movies_Array, smd)    
 
-	# print(final_movie_data[25].name)
-	print(user_genre_li)	
+	# print(final_movie_data)
 
 	mycontext ={
 		'final_movie_data':final_movie_data,
@@ -160,14 +133,7 @@ def filterOnGenre(request):
 	return render(request,"moviefilter/specificgenre.html",mycontext)
 	# return HttpResponse('<h1> From filterOnGenre Function</h1>')
 
-def removeMoviesUserWatched(request, smd, user_movies_to_remove):
-	print('&&&&&&&&&&--removeMoviesUserWatched()--&&&&&&&&&&----------')
-	print(user_movies_to_remove)
-	smd = smd.reset_index()
-	smd = smd[~smd['movieId'].isin(user_movies_to_remove)]
-	return smd
-
-def filterCSVOnGenre(reques, genreParam):
+def trainCSV(request):
 
 	# print('&&&&&&&&&&--filterCSVOnGenre--&&&&&&&&&&----------')
 	ratingsVar = ratings
@@ -227,71 +193,12 @@ def filterCSVOnGenre(reques, genreParam):
 
 	smd = small_keywordCSV.merge(smd, left_on='id', right_on='id')
 
-	genre_str = genreParam
-	smd = smd[smd['genres'].str.contains('%s'%(genre_str))]
-
+	# genre_str = genreParam
+	
 	print('&&&&&&&&&&--filterCSVOnGenre()--&&&&&&&&&&----------')
 	print(smd)
 	return smd
-	# print(type(small_keywordCSV['id'][0]))
-	#Output the shape of tfidf_matrix
-	# print(smd.shape)
 
-	
-def UserMoviesWithRating(request, smd_small_movieId, smd, session_id):
-	print('&&&&&&&&&&--UserMoviesWithRating()--&&&&&&&&&&----------')
-	user_cond = session_id
-	
-	user_cond = int(user_cond)
-	print(type(user_cond))
-	rating_cond = 0.5
-
-	ratingsVar = ratings
-
-	ratingsVar['movieId'] = ratingsVar['movieId'].astype('int')
-	small_ratings = ratingsVar[ratingsVar['movieId'].isin(smd_small_movieId)]
-
-
-	user_rating = small_ratings[small_ratings['userId']==user_cond][['rating','movieId']]
-	user_rating = user_rating[user_rating.sort_values(by=['rating'],ascending=False)['rating'] >= rating_cond]
-	# print(ratings.shape)
-	# print(small_ratings.shape)
-
-	top_user_movies_rating = user_rating.sort_values('rating', ascending=False)
-
-	user_movies_to_remove = top_user_movies_rating['movieId']
-
-	# print(user_movies_to_remove)
-
-	user_movies_to_remove = user_movies_to_remove.iloc[3:]
-
-	# print(user_movies_to_remove)
-
-	top_user_movies_rating = top_user_movies_rating.head(3)
-	# print(top_user_movies_rating)
-	# moviesVar = moviesVar.set_index('movieId')
-	user_favroite_movie_id = []
-	for m_id in top_user_movies_rating['movieId']:
-		user_favroite_movie_id.append(m_id)
-
-	# print(user_favroite_movie_id)
-
-	#  user_favroite_movie_id will be use to fetch movie details from smd dataframe
-
-	smd = smd.set_index('movieId')
-
-	top_rated_movie_by_user = []
-
-	for m_id in user_favroite_movie_id:
-		movieName = smd.loc[m_id]
-		top_rated_movie_by_user.append(movieName.title)
-
-	print(top_rated_movie_by_user)
-	myObj = {
-		'top_rated_movie_by_user':top_rated_movie_by_user,
-		'user_movies_to_remove': user_movies_to_remove
-	}
-	return myObj
 
 # Get the director's name from the crew feature. If director is not listed, return NaN
 def get_director(x):
@@ -331,10 +238,13 @@ def create_soup(x):
 def get_recommendations(title, cosine_sim, indices, smd):
 	# print(str(title))
 	idx = indices[title]
-	print('--------------&&&&&&&&&&&-----------')
-	# print(idx == pd.Series())
-	# if idx == pd.Series():
-	# 	print(idx.values())
+	print('----------get_recommendations()&&&&&&&&&&&-----------')
+	arr =[]
+	print(type(idx) != np.int64)  #== int64
+	if type(idx) != np.int64:
+		arr = idx.values
+		idx = arr[0]
+
 	sim_scores = list(enumerate(cosine_sim[idx]))
 	# print(sim_scores)
 	sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
