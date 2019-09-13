@@ -129,6 +129,7 @@ body {
   margin-bottom: 30px;
   font-family: "SFUIDisplayMedium";
   letter-spacing: 0.5px;
+  display: none;
 }
 .viewAllBtn:hover,
 .viewAllBtn:focus,
@@ -142,6 +143,9 @@ body {
 .owl-carousel {
   position: relative;
   padding-bottom: 75px;
+}
+.owl-carousel .owl-stage-outer{
+  max-height: 82%;
 }
 .owl-nav {
   position: absolute;
@@ -172,28 +176,32 @@ body {
 }
 
 .movieImage {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 12px;
-  overflow-y: hidden;
+    max-width: 70%;
+    height: auto;
+    margin: 0 auto;
+    margin-bottom: 12px;
+    overflow-y: hidden;
 }
 .movieImage img {
   width: 100%;
 }
-p.movieName,
-.star {
+p.movieName {
   color: #fff;
   font-size: 18px;
   line-height: 1.5;
   letter-spacing: 0.5px;
 }
+.star {
+  color: #929ab3;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
 /* .owl-item {
   max-width: 213px !important;
 } */
 
-.owl-content-btc-div {
-  margin-right: 15px;
-}
 .use-btc-slider {
   position: relative;
   overflow: hidden;
@@ -477,6 +485,11 @@ h4.loginTitle {
 }
 
 /* Star Rating */
+.owl-stage-outer .Rating {
+  display: table;
+  width: 70%;
+  margin: 8px auto 6px;
+}
 .Rating {
   display: table;
   width: 100%;
@@ -525,11 +538,15 @@ h4.loginTitle {
 }
 .starNumber {
   font-size: 14px;
-  color: #929ab3;
+  color: #ffc400;
   padding-left: 10px;
   line-height: 1;
-  display: table-cell;
+  display: inline-block;
   vertical-align: middle;
+}
+.owl-stage-outer .starNumber {
+  display: table-cell;
+  text-align: right;
 }
 
 /* Custom Word Checkbox */
@@ -695,18 +712,23 @@ h2.descHeading {
 
 .searchDiv {
   float: right;
-  margin-top: 30px;
+  margin-top: 20px;
   width: 350px;
 }
 
 .searchDiv input {
   border: 1px solid #ffc400;
-  height: 45px;
+  height: 38px;
   width: 300px;
   color: #fff;
   background-color: inherit;
   padding: 5px;
-  font-size: 20px;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+.searchDiv a{
+  color: #ffc400;
+  /*text-decoration: none;*/
 }
 
 .ui-menu {
@@ -802,6 +824,17 @@ h2.descHeading {
   margin-top: 10px;
 }
 
+.owl-content-btc-div p.movieName {
+    width: 70%;
+    margin: 0 auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    font-size: 15px;
+}
+.owl-prev .fa, .owl-next .fa{
+  color: #000 !important;
+}
 
 @media screen and (min-width: 1599px) {
   img.moviePoster {

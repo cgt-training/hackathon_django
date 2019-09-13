@@ -20,13 +20,12 @@
           <div class="collapse navbar-collapse" id="menuCollapse">
               <ul class="nav navbar-nav navbar-right">
                   <li class="active"><a href="/recommended">Explore</a></li>
-                  <li><a href="/similarity">Movies</a></li>
                   {% if request.session.id %}
+                    <li><a href="/movieoftheday">Movie of the Day</a></li>
                     <li><a href="#">Hello, {{request.session.id}}</a></li>
                     <li class="loginBtn"><a href="/">LOGOUT</a></li>
                   {% else %}
                     <li class="loginBtn" onclick="return showLoginModal()"><a href="#" id="myBtn">Login</a></li>
-                    <li><a href="#">Sign Up</a></li>
                   {% endif %}
               </ul>
               {% if request.session.id %}
