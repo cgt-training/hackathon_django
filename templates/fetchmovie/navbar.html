@@ -19,7 +19,7 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="menuCollapse">
               <ul class="nav navbar-nav navbar-right">
-                  <li class="active"><a href="#">Explore</a></li>
+                  <li class="active"><a href="/recommended">Explore</a></li>
                   <li><a href="/similarity">Movies</a></li>
                   {% if request.session.id %}
                     <li><a href="#">Hello, {{request.session.id}}</a></li>
@@ -29,6 +29,15 @@
                     <li><a href="#">Sign Up</a></li>
                   {% endif %}
               </ul>
+              {% if request.session.id %}
+                <div class="searchDiv">
+                  <input type="text" id="search-field" name="" placeholder="Search movie name">
+                  <input type="hidden" name="srch-movieid" id="srch-movieid">
+                  <!-- <a href="javascript:void(0)" id="adv-button">Advance Search</a> -->
+                  <a href="/advance_search" id="adv-button">Advance Search</a>
+                </div>
+              {% endif %}
+
           </div>
       </div>
   </nav>
@@ -57,24 +66,25 @@
 </div>
 
 <div class="clearfix"></div>
+
 <!-- The Modal -->
 <div id="rateModal" class="modal">
   <!-- Modal content -->
   <div class="modal-content">
-      <!-- <span class="close">&times;</span> -->
-      <h3 class="loginTitle">Rate This Movie</h3>
-      <form name="loginform" method="post" action="">
-      {%csrf_token%}
-          <div class="form-group">
-              <label>Rate (between 0 to 10)</label>
-              <input type="text" name="movieRate" id="rateThisMovieRate" class="form-control" placeholder="Enter Rate">
-              <input type="hidden" name="movieId" id="rateThisMovieId">
-              <input type="hidden" name="userId" value="{{request.session.id}}" id="rateThisMovieUserId">
-          </div>
-      </form>
-      <div class="buttons">
-          <button id ="modalRateBtn" class="btn modalLoginBtn">Rate</button>
-          <button id ="modalRateCancelBtn" class="btn btn-default modalCancelBtn">Cancel</button>
+    <!-- <span class="close">&times;</span> -->
+    <h3 class="loginTitle">Rate This Movie</h3>
+    <form name="rateForm" id="rateForm" method="post" action="">
+    {%csrf_token%}
+      <div class="form-group">
+        <label>Rate (between 0 to 5)</label>
+        <input type="text" name="movieRate" id="rateThisMovieRate" class="form-control" placeholder="Enter Rate">
+        <input type="hidden" name="movieId" id="rateThisMovieId">
+        <div id="rateErrorDiv" class="btn-danger"></div>
       </div>
+    </form>
+    <div class="buttons">
+      <button id ="modalRateBtn" class="btn modalLoginBtn">Rate</button>
+      <button id ="modalRateCancelBtn" class="btn btn-default modalCancelBtn">Cancel</button>
+    </div>
   </div>
 </div>

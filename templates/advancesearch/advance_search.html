@@ -1,0 +1,143 @@
+{% extends 'fetchmovie/base.html' %}
+{% block content %}
+
+	<div class="advanced-search">
+		<form action="" method="get" accept-charset="utf-8">
+			<h2>ADVANCED SEARCH</h2>
+
+			<table>
+				<tr>
+					<th><label for="adv-search-field">Search Title</label></th>
+					<th><label for="adv-genre">Genre</label></th>
+					<th><label for="adv-year">Releasing Year</label></th>
+					<th><label for="adv-language">Language</label></th>
+					<th><label for="adv-rating">Rating</label></th>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" name="searchText" placeholder="Enter search here" id="adv-search-field" class="blink search-field"  />
+					</td>
+					<td>
+						<select name="genre" id="adv-genre">
+							<option value="">Select Genre</option>
+							<option value="Action">Action</option>
+							<option value="Adventure">Adventure</option>
+							<option value="Animation">Animation</option>
+							<option value="Children">Children</option>
+							<option value="Comedy">Comedy</option>
+							<option value="Crime">Crime</option>
+							<option value="Documentary">Documentary</option>
+							<option value="Drama">Drama</option>
+							<option value="Fantasy">Fantasy</option>
+							<option value="Film-Noir">Film-Noir</option>
+							<option value="Horror">Horror</option>
+							<option value="IMAX">IMAX</option>
+							<option value="Musical">Musical</option>
+							<option value="Mystery">Mystery</option>
+							<option value="Romance">Romance</option>
+							<option value="Sci-Fi">Sci-Fi</option>
+							<option value="Thriller">Thriller</option>
+							<option value="War">War</option>
+							<option value="Western">Western</option>
+						</select>
+					</td>
+					<td>
+						<select name="year" id="adv-year">
+							<option value="">Select Year</option>
+							{% for i in "x"|rjust:"120" %}
+								<option value="{{forloop.counter|add:1900}}">{{forloop.counter|add:1900}}</option>
+							{% endfor %}
+						</select>
+					</td>
+					<td>
+						<select name="language" id="adv-language">
+							<option value="">Select Language</option>
+							<option value="en">English</option>
+							<option value="hi">Hindi</option>
+							<option value="fr">French</option>
+							<option value="zh">Chinese</option>
+						</select>
+					</td>
+					<td>
+						<select name="rating" id="adv-rating">
+							<option value="">Select Rating</option>
+							{% for i in "x"|rjust:"10" %}
+								<option value="{{forloop.counter}}">{{forloop.counter}}</option>
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+			</table>
+
+			<br>
+			<input type="submit" value="SEARCH" class="search-button" />
+			<input type="reset" id="clear-btn" value="Clear" class="search-button" />
+			<!-- <input type="button" id="cancel-btn" value="Close" class="search-button" /> -->
+		</form>
+	</div>
+	
+	<section class="movieViews">
+		<div class="container-fluid">
+			
+			{% for movies in result %}
+			<div class="view-page-adv">
+				<h3><a href="/topmovies?movieId={{movies.id}}">{{movies.title_x}}</a></h3>
+				<hr>
+				<div class="movie-div">
+					<div class="movie-image">
+						<img src="https://image.tmdb.org/t/p/w500{{movies.poster_path}}" alt="" width="150" />
+					</div>
+				</div>
+				<div class="content-div">
+					<div style="clear: both;"></div>
+					<div class="description">
+						<div class="desc-group">
+							<div class="desc-heading">Title : </div>
+							<div class="desc-content">{{movies.title_y}}</div>
+						</div>
+						<div class="desc-group">
+							<div class="desc-heading">Rating : </div>
+							<div class="desc-content">{{movies.vote_average}}</div>
+						</div>
+						<div class="desc-group">
+							<div class="desc-heading">Tag Line : </div>
+							<div class="desc-content">{{movies.tagline}}</div>
+						</div>
+						<div class="desc-group">
+							<div class="desc-heading">Released on : </div>
+							<div class="desc-content">{{movies.release_date}}</div>
+						</div>
+						<div class="desc-group">
+							<div class="desc-heading">Overview : </div>
+							<div class="desc-content">{{movies.overview}}</div>
+						</div>
+						<div class="desc-group">
+							<div class="desc-heading">Genres : </div>
+							<div class="desc-content">{{movies.genres_x}}</div>
+						</div>
+						<div class="desc-group">
+							<div class="desc-heading">Language : </div>
+							<div class="desc-content">{{movies.original_language}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+			{% endfor %}
+
+
+		</div>
+	</section>
+
+<script type="text/javascript">
+$("#adv-search-field").val('{{searchText}}')
+$("#adv-genre").val('{{genre}}')
+$("#adv-year").val('{{year}}')
+$("#adv-language").val('{{language}}')
+$("#adv-rating").val('{{rating}}')
+</script>
+	
+{% endblock %}
+
+
+

@@ -23,6 +23,8 @@ urlpatterns = [
     path('movieoftheday/', include('movieoftheday.urls')),
     path('recommended/', include('collabFiltering.urls')),
     path('similarity/', include('similarmovies.urls')),
+    path('advance_search/', include('advancesearch.urls')),
+    path('giverating/', include('giverating.urls')),
     path('admin/', admin.site.urls),
 ]
 

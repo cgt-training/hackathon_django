@@ -233,6 +233,115 @@ function showLoginModal(){
 /*
     ****************** ********* ********* ********* ********* ********* ********* *********  
                         
+                        Rate Movie, Searching and opening Mood model
+
+    ****************** ********* ********* ********* ********* ********* ********* ********* 
+
+*/
+
+
+
+/* rate this movie */
+
+$(".rateBtn").click(function(){
+    movieid = $(this).attr('movieid');
+    $("#rateThisMovieId").val(movieid);
+    $("#rateErrorDiv").html('');
+    $("#rateThisMovieRate").val('');
+    $("#rateModal").modal();
+});
+
+$("#modalRateBtn").click(function(){
+    formData = $("#rateForm").serialize()
+    $.ajax({
+        type: "POST",
+        url: "/giverating/",
+        data: formData,
+        success: function(result){
+            if(result.error == 0) {
+                $("#rateModal").modal('hide');
+                $(".movieViews").find("[movieid="+$("#rateThisMovieId").val()+"]").hide()
+            }
+            else if(result.error == 1) 
+                $("#rateErrorDiv").html('Method not accepted')
+            else if(result.error == 2) 
+                $("#rateErrorDiv").html('You are already given rating to this movie')
+            else if(result.error == 3) 
+                $("#rateErrorDiv").html('Please give proper rating')
+        },
+        failure: function (response) {
+            console.log(response);
+        }
+    });
+});
+
+$("#modalRateCancelBtn").click(function(){
+    $("#rateModal").modal('hide');
+});
+
+
+$(document).ready(function() {
+    $("#moodModal").modal();
+});
+
+$("#modalMoodCancelBtn").click(function(){
+    $("#moodModal").modal('hide');
+});
+
+
+$("#search-field").autocomplete({
+    source: function (request, response) {
+        $.ajax({
+            url: "/advance_search/search_movie",
+            type: "GET",
+            data: request,
+            success: function (data) {
+                response($.map(data, function (el) {
+                    return {
+                        label: el.title,
+                        value: el.movieId
+                    };
+                }));
+            }
+        });
+    },
+    select: function (event, ui) {
+        // Prevent value from being put in the input:
+        this.value = ui.item.label;
+        // Set the next input's value to the "value" of the item.
+        $('#srch-movieid').val(ui.item.value);
+        event.preventDefault();
+        location='/similarity?realMovieId='+ui.item.value
+    }
+});
+
+
+/*$("#adv-button").click(function(){
+    $(".advanced-search").slideToggle();
+});*/
+
+/*$("#cancel-btn").click(function(){
+    $(".advanced-search").slideUp('slow');
+});*/
+
+/*$("#clear-btn").click(function(){
+    $(".advanced-search").slideUp('slow');
+});*/
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    ****************** ********* ********* ********* ********* ********* ********* *********  
+                        
                         Not using currently 
 
     ****************** ********* ********* ********* ********* ********* ********* ********* 
@@ -308,32 +417,3 @@ function showDialog(result){
     });
 }
 
-
-$(".rateBtn").click(function(){
-    movieid = $(this).attr('movieid');
-    $("#rateThisMovieId").val(movieid)
-    $("#rateModal").modal();
-});
-
-$("#modalRateBtn").click(function(){
-    $.ajax({
-        type: "POST",
-        url: "authentic/login",
-        headers: {"X-CSRFToken": csrftoken},
-        // data: jsonVal,
-        data: res,
-        success: function(result){
-            console.log(result);
-            modal.style.display = "none";
-            // $.redirect("/topmovies", {'arg1': 'value1', 'arg2': 'value2'});
-            window.location.href = "/recommended";                
-            // var json_data = JSON.parse(result);
-            // console.log(json_data);
-            // // $("#myModal").;
-            // showDialog(json_data);
-        },
-        failure: function (response) {
-            console.log(response);
-        }
-    });
-});

@@ -155,7 +155,8 @@ def filterOnGenre(request):
 	mycontext ={
 		'final_movie_data':final_movie_data,
 		'user_genre_li': user_genre_li,
-		'remaining_genre': all_genre		
+		'remaining_genre': all_genre,
+		'genreParam': genreParam
 	}
 
 	return render(request,"moviefilter/specificgenre.html",mycontext)
@@ -333,7 +334,12 @@ def get_recommendations(title, cosine_sim, indices, smd):
 	# print(str(title))
 	idx = indices[title]
 	print('--------------&&&&&&&&&&&-----------')
-	# print(idx == pd.Series())
+	print(idx)
+	arr =[]
+	print(type(idx) != np.int64)  #== int64
+	if type(idx) != np.int64:
+		arr = idx.values
+		idx = arr[0]
 	# if idx == pd.Series():
 	# 	print(idx.values())
 	sim_scores = list(enumerate(cosine_sim[idx]))

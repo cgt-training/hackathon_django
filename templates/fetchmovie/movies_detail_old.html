@@ -1,7 +1,6 @@
 {% extends 'fetchmovie/base.html' %}
 {% block content %}
-
-{% if moviedetail %}
+	
     <!-- Breadcrumbs -->
     <div class="container-fluid">
         <div class="row">
@@ -20,7 +19,9 @@
         <div class="row">
             <div class="col-md-3 col-lg-2">
                 {% load static %}
-                <img src="http://image.tmdb.org/t/p/w154{{moviedetail.poster_path}}" alt="Movie01">
+            	{% with image_path="http://image.tmdb.org/t/p/w154"|add:moviedetail.poster_path %}	
+            		<img src={{image_path}} alt="Movie01">
+            	{% endwith %}
             </div>
             <div class="col-md-9 col-lg-10">
                 <p class="movieName movieDescName">{{moviedetail.title}}</p>
@@ -64,7 +65,7 @@
                 <div class="overview">
                     <h2 class="descHeading">Overview</h2>
                     <p>
-                        {{moviedetail.overview}}
+                    	{{moviedetail.overview}}
                     </p>
                 </div>
             </div>
@@ -74,7 +75,7 @@
             <div class="col-sm-12">
                 <div class="moviesVideo">
                     <h2 class="descHeading">
-                        Video
+                    	Video
                     </h2>
                     <ul class="list-inline ">
                         <li>
@@ -98,8 +99,5 @@
             </div>
         </div>
     </div>
-{% else %}
-    <h1 style="color: #fff;">No Special movie for today</h1>
-{% endif %}
 
 {% endblock %}

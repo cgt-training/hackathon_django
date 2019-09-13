@@ -27,6 +27,7 @@ try:
 except CParserError as e:
 	print(e)
 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
+	
 try:
 	file_movies = open(os.path.join(settings.BASE_DIR, 'datasets/movies.csv'))
 	movies = pd.read_csv(file_movies)
@@ -62,6 +63,11 @@ def dummy(request):
 		del request.session['user_genre']
 	if 'sim_movie' in request.session:
 		del request.session['sim_movie']
+	if 'moods' in request.session:
+		del request.session['moods']
+	if 'mood_set' in request.session:
+		del request.session['mood_set']
+	
 	moviesVar = movies 
 
 	moviedetailVar = moviedetail

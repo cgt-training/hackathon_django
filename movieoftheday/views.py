@@ -56,23 +56,43 @@ def movieDay(request):
 	
 	datem = datetime.now().strftime('%m') +'-' +datetime.now().strftime('%d')
 
-	date_var = movie_day_var[movie_day_var['date'].str.contains(str(datem))==True].head(1).values
+	date_var = movie_day_var[movie_day_var['date'].str.contains(str(datem))==True].to_dict('records')
 	
-	print(date_var)
-	tag_value = date_var[0][2]
-	
+	#print(date_var)
 	mov_details= ''
-	
-	tag_data = moviedetailVar[moviedetailVar['overview'].str.contains(tag_value)==True].head(1)
+	tag_value = ""
+	#if 0 in date_var:
+	#if 'keywords' in date_var[]:
+	for keywords in date_var:
+		tag_value = date_var[0]['keywords']
 
-	movie_id = int(tag_data.id)
+		if tag_value:
+			tag_data = moviedetailVar[moviedetailVar['overview'].str.contains(tag_value)==True].head(1)
+			movie_id = int(tag_data.id)
+			mov_details = getMovieDetailMovieDay(movie_id)
+			#print(type(mov_details))
 
-	mov_details = getMovieDetailMovieDay(movie_id)
-	
-	print(type(mov_details))	  
 	myData ={
 		"moviedetail": mov_details
 	}
+		
+	# date_var = movie_day_var[movie_day_var['date'].str.contains(str(datem))==True].head(1).values
+	
+	# print(date_var)
+	# tag_value = date_var[0][2]
+	
+	# mov_details= ''
+	
+	# tag_data = moviedetailVar[moviedetailVar['overview'].str.contains(tag_value)==True].head(1)
+
+	# movie_id = int(tag_data.id)
+
+	# mov_details = getMovieDetailMovieDay(movie_id)
+	
+	# print(type(mov_details))	  
+	# myData ={
+	# 	"moviedetail": mov_details
+	# }
 
 	return render(request,"movieoftheday/movieOfTheDay.html", myData)
 
