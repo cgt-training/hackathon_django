@@ -41,7 +41,7 @@
 	                            <div class="imageLeft">
 	                                {% load static %}
 	           {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}
-	           			<a href="/topmovies?movieId={{row_movie.id}}">                      
+	           			<a href="/similarity?movieId={{row_movie.id}}">                      
                             <img src={{image_path}} alt="Movie01">
                         </a>                       
 	           {% endwith %}

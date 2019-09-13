@@ -138,6 +138,33 @@ $(document).ready(function() {
 
     });
 
+    $("#owl-btc-simMovie").owlCarousel({
+
+        loop: false,
+        margin: 10,
+        responsiveClass: true,
+        nav: true,
+        navText: ["<i class='fa fa-chevron-left pink pink-left'> </i>", "<i class='fa fa-chevron-right pink'></i>"],
+        responsive: {
+            0: {
+
+                items: 1,
+                loop: true,
+            },
+            600: {
+
+                items: 3,
+                loop: true,
+            },
+            1000: {
+
+                items: 5,
+                loop: true,
+            }
+        }
+
+    });
+
 });
 
 

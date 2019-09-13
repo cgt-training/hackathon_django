@@ -9,6 +9,7 @@ from django.shortcuts import render
 import requests
 import numpy as np
 import csv
+import ast
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
@@ -58,6 +59,47 @@ try:
 except CParserError as e:
 	print(e)
 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
+
+
+
+
+def moviesDetail(request):
+
+	movieIdParam = float(request.GET["movieId"])
+	tmdbId = int(movieIdParam)
+	# print(movieIdParam)
+	moviedetailVar = moviedetail
+
+	# genre_li = request.session['user_genre']
+	# print('---------TOP Movies--------------------')
+	# print(genre_li)
+	# links_tmdbId = links.drop(['imdbId'],axis=1)
+
+	metaRow = moviedetailVar.loc[moviedetailVar.id == str(tmdbId)]
+	metaRow = metaRow.to_dict('records')
+
+	genresStr = metaRow[0]['genres']
+	json_data = ast.literal_eval(genresStr)
+	
+	#genres1 = json_data#json.dumps(json_data)
+	genres = ""
+	for genre in json_data:
+		genres = genres + genre['name'] + '| '
+
+	sim_movies = metaRow[0]['title']	
+	
+	request.session['sim_movie'] = sim_movies
+	print(request.session['sim_movie'])
+
+	my_context ={
+		# "movie_list": movie_names_arrays,
+		"moviedetail": metaRow[0],
+		"genres" : genres
+	}
+
+
+		
+	return render(request,"fetchmovie/movies_detail.html",my_context)
 
 
 
@@ -130,9 +172,9 @@ def simMovies(request):
 		'remaining_genre': all_genre		
 	}
 
-	return render(request,"moviefilter/specificgenre.html",mycontext)
-	# return HttpResponse('<h1> From filterOnGenre Function</h1>')
-
+	return final_movie_data
+	# return render(request,"moviefilter/specificgenre.html",mycontext)
+	
 def trainCSV(request):
 
 	# print('&&&&&&&&&&--filterCSVOnGenre--&&&&&&&&&&----------')

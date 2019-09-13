@@ -68,7 +68,8 @@ def filterOnGenre(request):
 	session_id = 0
 	if 'id' in request.session:
 		session_id = request.session['id']
-	print(genreParam)
+	
+	# print(genreParam)
 	smd = filterCSVOnGenre(request, genreParam)
 	
 	print(smd.empty)
@@ -91,13 +92,13 @@ def filterOnGenre(request):
 
 	smd = removeMoviesUserWatched(request, smd, user_movies_to_remove)
 
-	print('&&&&&&&&&&----------&&&&&&&&&&----------')
+	# print('&&&&&&&&&&----------&&&&&&&&&&----------')
 	
 	features = ['cast', 'crew', 'keywords']
 	
 	for feature in features:
 	    smd[feature] = smd[feature].apply(literal_eval)
-	print(smd.shape)
+	# print(smd.shape)
 
 	# # Define new director, cast, genres and keywords features that are in a suitable form.
 	smd['director'] = smd['crew'].apply(get_director)
@@ -149,7 +150,7 @@ def filterOnGenre(request):
 	final_movie_data = getMovieDetailWithName(similar_movies_Array, smd)    
 
 	# print(final_movie_data[25].name)
-	print(user_genre_li)	
+	# print(user_genre_li)	
 
 	mycontext ={
 		'final_movie_data':final_movie_data,
@@ -161,8 +162,8 @@ def filterOnGenre(request):
 	# return HttpResponse('<h1> From filterOnGenre Function</h1>')
 
 def removeMoviesUserWatched(request, smd, user_movies_to_remove):
-	print('&&&&&&&&&&--removeMoviesUserWatched()--&&&&&&&&&&----------')
-	print(user_movies_to_remove)
+	# print('&&&&&&&&&&--removeMoviesUserWatched()--&&&&&&&&&&----------')
+	# print(user_movies_to_remove)
 	smd = smd.reset_index()
 	smd = smd[~smd['movieId'].isin(user_movies_to_remove)]
 	return smd
@@ -230,8 +231,8 @@ def filterCSVOnGenre(reques, genreParam):
 	genre_str = genreParam
 	smd = smd[smd['genres'].str.contains('%s'%(genre_str))]
 
-	print('&&&&&&&&&&--filterCSVOnGenre()--&&&&&&&&&&----------')
-	print(smd)
+	# print('&&&&&&&&&&--filterCSVOnGenre()--&&&&&&&&&&----------')
+	# print(smd)
 	return smd
 	# print(type(small_keywordCSV['id'][0]))
 	#Output the shape of tfidf_matrix
@@ -239,11 +240,11 @@ def filterCSVOnGenre(reques, genreParam):
 
 	
 def UserMoviesWithRating(request, smd_small_movieId, smd, session_id):
-	print('&&&&&&&&&&--UserMoviesWithRating()--&&&&&&&&&&----------')
+	# print('&&&&&&&&&&--UserMoviesWithRating()--&&&&&&&&&&----------')
 	user_cond = session_id
 	
 	user_cond = int(user_cond)
-	print(type(user_cond))
+	# print(type(user_cond))
 	rating_cond = 0.5
 
 	ratingsVar = ratings
@@ -286,7 +287,7 @@ def UserMoviesWithRating(request, smd_small_movieId, smd, session_id):
 		movieName = smd.loc[m_id]
 		top_rated_movie_by_user.append(movieName.title)
 
-	print(top_rated_movie_by_user)
+	# print(top_rated_movie_by_user)
 	myObj = {
 		'top_rated_movie_by_user':top_rated_movie_by_user,
 		'user_movies_to_remove': user_movies_to_remove

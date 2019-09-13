@@ -31,7 +31,41 @@
                 </li>
         </ul>
     </div>
-	
+
+    {% if request.session.sim_movie %}
+        <section class="topActionMovies">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="heading">
+                        <h2 class="pull-left">Similar Movies that you searched</h2>
+                        <button class="btn viewAllBtn pull-right">View All</button>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="use-btc-slider">
+                        <div id="owl-btc-simMovie" class="owl-carousel">
+                            {% for row_movie in sim_movies %}
+                                <div class="owl-content-btc-div">
+                                    <div class="movieImage">
+                                    {% load static %}
+                                    {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}    
+                                        <a href="/similarity?movieId={{row_movie.tmdbId}}">                   
+                                                <img src={{image_path}} alt="Movie01">
+                                            </a>
+                                        {% endwith %}
+                                    </div>
+                                    <p class="movieName">{{row_movie.title}}</p>
+                                    <div class="Rating">
+                                        <span class="star">Rating</span>
+                                        <span class="starNumber">{{row_movie.vote_average}}</span>
+                                    </div>
+                                </div>
+                            {% endfor %} 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+	{% endif %}
     <section class="movieViews">
         <div class="container-fluid">
             <ul class="list-inline">
@@ -41,7 +75,8 @@
                             <div class="imageLeft">
                                 {% load static %}
             {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %} 
-                            <a href="/topmovies?movieId={{row_movie.id}}">                      
+                            <!-- <a href="/topmovies?movieId={{row_movie.id}}"> -->
+                            <a href="/similarity?movieId={{row_movie.id}}">                      
                                 <img src={{image_path}} alt="Movie01">
                             </a>
             {% endwith %}
