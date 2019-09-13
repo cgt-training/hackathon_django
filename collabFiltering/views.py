@@ -110,7 +110,9 @@ def index(request):
 	#print(size_user_rating[0])
 	# Creates a list containing 5 lists, each of 8 items, all set to 0
 	w, h = 2, size_user_rating[0];
+
 	user_rating_movies = [[0 for x in range(w)] for y in range(h)]
+	
 	i=0
 	for index, row in user_rating.iterrows():
 		user_rating_movies[i][0] = row['title']
@@ -132,14 +134,14 @@ def index(request):
 	corrMatrix = userRatingsMovies.corr(method='pearson')
 	corrMatrix.head(40)
 	romantic_lover = user_rating_movies
-	#print(romantic_lover)
+	# print(romantic_lover)
 	similar_movies = pd.DataFrame()
 	for movie,rating in romantic_lover:
 		similar_movies = similar_movies.append(get_similar(movie,rating,corrMatrix),ignore_index = False)
 		#print(similar_movies)
 	#similar_movies.head(10)
 	#print(similar_movies)
-	sim_movies_out = similar_movies.sum().sort_values(ascending=False).head(20)
+	sim_movies_out = similar_movies.sum().sort_values(ascending=False)
 	# print(type(sim_movies_out))
 	
 	df = sim_movies_out.to_frame()
@@ -148,14 +150,39 @@ def index(request):
 	y = json.loads(json_data)
 	movie_names_keys = y['0'].keys()
 	movie_names_arrays = list(movie_names_keys)
-	#print(movie_names_arrays)
+	print(len(movie_names_arrays))
+
+	user_already_watched = []
+
+	for movie in user_rating_movies:
+		value = movie[0]
+		user_already_watched.append(value)    
+
+	# print(user_already_watched)
+
+
+	for x in user_already_watched:
+		# print(x)
+		if x in movie_names_arrays: 
+			movie_names_arrays.remove(x)
+
+	print(len(movie_names_arrays))
+
+	movie_names_arrays_new = []
+	i = 0
+
+	for movie in movie_names_arrays:
+		movie_names_arrays_new.append(movie)
+		i = i+1
+		if i > 19:
+			break
 
 	"""
 		this function will find details of the movie.
 	"""
 	movie_detail_array = []
 
-	movie_detail_array = getMovieDetail(movie_names_arrays)
+	movie_detail_array = getMovieDetail(movie_names_arrays_new)
 
 	# print('movie_detail_array[0][title]')
 	# print(movie_detail_array[0].name)
@@ -193,6 +220,7 @@ def getMovieDetail(movie_names_arrays):
 	movies_details['id'] = movies_details['id'].astype('int')
 	movies_details = movies_details.drop(['original_title','title'],axis=1)
 
+
 	movies_details_filter = movies_details[movies_details['id'].isin(links_small_filter)]
 	movies_details_filter = moviesVar.merge(movies_details_filter, left_on='id', right_on='id')
 
@@ -203,10 +231,20 @@ def getMovieDetail(movie_names_arrays):
 	# print(movies_details_filter.keys())
 	movie_det_array = []
 	# detail = movies_details_filter.loc['Indiana Jones and the Temple of Doom (1984)']
+	value = pd.Series()
+	value = movies_details_filter.loc['Indiana Jones and the Temple of Doom (1984)']
+	print('************---------------************')
+	print(value)
 	for movie in movie_names_arrays:
-		detail = movies_details_filter.loc[movie]
-		movie_det_array.append(detail)
-
+		# print(movies_details_filter.loc[movie])
+		try:
+			detail = movies_details_filter.loc[movie]
+			# print(detail)
+			movie_det_array.append(detail)
+		except Exception as e:	
+			print('************---------------************')
+			print(value)
+			movie_det_array.append(value)
 	return movie_det_array
 	
 
