@@ -71,6 +71,15 @@ def movieDay(request):
 			movie_id = int(tag_data.id)
 			mov_details = getMovieDetailMovieDay(movie_id)
 			#print(type(mov_details))
+			json_data = mov_details['genres']
+			#json_data = ast.literal_eval(genresStr)
+			
+			#genres1 = json_data#json.dumps(json_data)
+			genres = ""
+			for genre in json_data:
+				genres = genres + genre['name'] + ' | '
+
+			mov_details['genres'] = genres
 
 	myData ={
 		"moviedetail": mov_details

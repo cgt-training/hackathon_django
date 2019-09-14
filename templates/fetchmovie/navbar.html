@@ -19,8 +19,8 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="menuCollapse">
               <ul class="nav navbar-nav navbar-right">
-                  <li class="active"><a href="/recommended">Explore</a></li>
                   {% if request.session.id %}
+                    <li class="active"><a href="/recommended">Explore</a></li>
                     <li><a href="/movieoftheday">Movie of the Day</a></li>
                     <li><a href="#">Hello, {{request.session.id}}</a></li>
                     <li class="loginBtn"><a href="/">LOGOUT</a></li>
@@ -53,8 +53,8 @@
       <form name="loginform" method="post" action="">
       {%csrf_token%}
           <div class="form-group">
-              <label>Username</label>
-              <input type="text" id="username" class="form-control" placeholder="Enter Username">
+              <label>User ID</label>
+              <input type="text" id="username" class="form-control" placeholder="Enter User ID">
           </div>
       </form>
       <div class="buttons">
