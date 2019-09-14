@@ -89,59 +89,63 @@ def advance_search(request):
 	if 'rating' in request.GET:
 		rating = request.GET['rating']
 
-	# DFMovie = pd.read_csv('datasets/movies.csv')
-	DFMovie = movies
-	# DFLink = pd.read_csv('datasets/links.csv')
-	DFLink = links
-	# DFMeta = pd.read_csv('datasets/movies_metadata.csv')
-	DFMeta = moviedetail
+	movieDataSetResult = ""
 
-	DFMeta = DFMeta.drop(["belongs_to_collection", "homepage", "runtime", "video", "adult", "budget", "revenue", "spoken_languages", "status", "vote_count"], axis=1)
+	if searchText != "" or genre != "" or year != "" or language != "" or rating != "":
 
-	joinedMovie = pd.merge(DFMovie, DFLink, on='movieId', how='left')
-	joinedMovie = joinedMovie.dropna()
-	joinedMovie['tmdbId']=joinedMovie['tmdbId'].astype(int)
-	joinedMovie['tmdbId']=joinedMovie['tmdbId'].astype(str)
-	movieDataSet = pd.merge(joinedMovie, DFMeta, left_on='tmdbId', right_on='id', how='left')
+		# DFMovie = pd.read_csv('datasets/movies.csv')
+		DFMovie = movies
+		# DFLink = pd.read_csv('datasets/links.csv')
+		DFLink = links
+		# DFMeta = pd.read_csv('datasets/movies_metadata.csv')
+		DFMeta = moviedetail
 
-	movieDataSet[['tagline']] = movieDataSet[['tagline']].fillna('')
-	movieDataSet = movieDataSet.dropna()
+		DFMeta = DFMeta.drop(["belongs_to_collection", "homepage", "runtime", "video", "adult", "budget", "revenue", "spoken_languages", "status", "vote_count"], axis=1)
 
-	movieDataSet['release_date'] = pd.to_datetime(movieDataSet['release_date'])
+		joinedMovie = pd.merge(DFMovie, DFLink, on='movieId', how='left')
+		joinedMovie = joinedMovie.dropna()
+		joinedMovie['tmdbId']=joinedMovie['tmdbId'].astype(int)
+		joinedMovie['tmdbId']=joinedMovie['tmdbId'].astype(str)
+		movieDataSet = pd.merge(joinedMovie, DFMeta, left_on='tmdbId', right_on='id', how='left')
 
-	if (genre != ""):
-		movieDataSet = movieDataSet.loc[movieDataSet.genres_x.str.contains(pat=genre, case=False)]
+		movieDataSet[['tagline']] = movieDataSet[['tagline']].fillna('')
+		movieDataSet = movieDataSet.dropna()
 
-	#cond1 = movieDataSet.count()
+		movieDataSet['release_date'] = pd.to_datetime(movieDataSet['release_date'])
 
-	if (year != ""):
-		#movieDataSet = movieDataSet.loc[movieDataSet.release_date.str.contains(pat=year, case=False).notnull()]
-		movieDataSet = movieDataSet.loc[movieDataSet.release_date.dt.year == int(year)]
+		if (genre != ""):
+			movieDataSet = movieDataSet.loc[movieDataSet.genres_x.str.contains(pat=genre, case=False)]
 
-	#cond2 = movieDataSet.count()
+		#cond1 = movieDataSet.count()
 
-	if (language != ""):
-		movieDataSet = movieDataSet.loc[movieDataSet.original_language.str.contains(pat=language, case=False)]
+		if (year != ""):
+			#movieDataSet = movieDataSet.loc[movieDataSet.release_date.str.contains(pat=year, case=False).notnull()]
+			movieDataSet = movieDataSet.loc[movieDataSet.release_date.dt.year == int(year)]
 
-	#cond3 = movieDataSet.count()
+		#cond2 = movieDataSet.count()
 
-	if (searchText != ""):
-		movieDataSet = movieDataSet[movieDataSet['title_x'].str.contains(searchText) | movieDataSet['original_title'].str.contains(searchText) | movieDataSet['overview'].str.contains(searchText) | movieDataSet['tagline'].str.contains(searchText)] 
+		if (language != ""):
+			movieDataSet = movieDataSet.loc[movieDataSet.original_language.str.contains(pat=language, case=False)]
 
-	#cond4 = movieDataSet.count()
+		#cond3 = movieDataSet.count()
 
-	if (rating != ""):
-		lastRating = float(rating)
-		lastRating = lastRating+1.0
-		movieDataSet = movieDataSet.loc[(movieDataSet.vote_average >= float(rating)) & (movieDataSet.vote_average < lastRating)]
+		if (searchText != ""):
+			movieDataSet = movieDataSet[movieDataSet['title_x'].str.contains(searchText) | movieDataSet['original_title'].str.contains(searchText) | movieDataSet['overview'].str.contains(searchText) | movieDataSet['tagline'].str.contains(searchText)] 
+
+		#cond4 = movieDataSet.count()
+
+		if (rating != ""):
+			lastRating = float(rating)
+			lastRating = lastRating+1.0
+			movieDataSet = movieDataSet.loc[(movieDataSet.vote_average >= float(rating)) & (movieDataSet.vote_average < lastRating)]
 
 
-	#cond5 = movieDataSet.count()
+		#cond5 = movieDataSet.count()
 
-	#count_nan = joinedMovie.isnull().sum(axis = 0)
-	#movieDataSetResult = count_nan #movieDataSet.head()
-	movieDataSetResult = movieDataSet.head(50)
-	movieDataSetResult = movieDataSetResult.to_dict('records')
+		#count_nan = joinedMovie.isnull().sum(axis = 0)
+		#movieDataSetResult = count_nan #movieDataSet.head()
+		movieDataSetResult = movieDataSet.head(50)
+		movieDataSetResult = movieDataSetResult.to_dict('records')
 
 	resultSet = {
 		'result':movieDataSetResult, 

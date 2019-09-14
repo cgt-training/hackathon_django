@@ -85,7 +85,8 @@
 				<hr>
 				<div class="movie-div">
 					<div class="movie-image">
-						<img src="https://image.tmdb.org/t/p/w500{{movies.poster_path}}" alt="" width="150" />
+						{% load static %}
+						<img src="https://image.tmdb.org/t/p/w500{{movies.poster_path}}" alt="" width="150" height="230" onError="this.onerror=null;this.src='{% static 'images/movie-background.png' %}';" />
 					</div>
 				</div>
 				<div class="content-div">

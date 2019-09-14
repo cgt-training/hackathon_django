@@ -88,7 +88,7 @@ def moviesDetail(request):
 	# print(movieIdParam)
 	moviedetailVar = moviedetail
 
-	moodMovies = moviesOnMood(request, keywords, moods_recommendation_csv, tmdbId)
+	moodMovies = moviesOnMood(request, tmdbId)
 
 	# genre_li = request.session['user_genre']
 	# print('---------TOP Movies--------------------')
@@ -138,7 +138,7 @@ def moviesDetail(request):
 
 
 
-def moviesOnMood(request, keywords, moods_recommendation_csv, tmdbId):
+def moviesOnMood(request, tmdbId):
 	# try:
 	# 	file_keywords = open(os.path.join(settings.BASE_DIR, 'datasets/keywords.csv'))
 	# 	keywords = pd.read_csv(file_keywords)
@@ -146,8 +146,11 @@ def moviesOnMood(request, keywords, moods_recommendation_csv, tmdbId):
 	# 	print(e)
 	# 	raise formbuilder_core.views.ValidationException('report', 'insufficient')
 
-	kewordsCsv = keywords
-	moodsCsv = moods_recommendation_csv
+	# kewordsCsv = keywords
+	# moodsCsv = moods_recommendation_csv
+	moodsCsv = pd.read_csv('datasets/moods_recommendation.csv')
+	kewordsCsv = pd.read_csv('datasets/keywords.csv')
+
 	kewordsData = kewordsCsv.loc[kewordsCsv.id == tmdbId]
 	#print(kewordsData.head())
 	if not kewordsData.empty:
@@ -211,12 +214,12 @@ def moviesOnMood(request, keywords, moods_recommendation_csv, tmdbId):
 		#Filter to small movies set
 		movies = movies[movies['id'].isin(links)]
 
-		keywords = kewordsCsv
-		keywords['keywords'] = keywords['keywords'].apply(literal_eval)
-		keywords['my_keywords'] = keywords['keywords'].apply(get_keywords)
-		keywords['id'] = keywords['id'].astype('int')
+		keywords2 = kewordsCsv
+		keywords2['keywords'] = keywords2['keywords'].apply(literal_eval)
+		keywords2['my_keywords'] = keywords2['keywords'].apply(get_keywords)
+		keywords2['id'] = keywords2['id'].astype('int')
 
-		movies = movies.merge(keywords,on='id')
+		movies = movies.merge(keywords2,on='id')
 
 		tf = TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0, stop_words='english')
 		tfidf_matrix = tf.fit_transform(movies['my_keywords'])

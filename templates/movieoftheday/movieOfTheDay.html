@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-md-3 col-lg-2">
                 {% load static %}
-                <img src="http://image.tmdb.org/t/p/w154{{moviedetail.poster_path}}" alt="Movie01">
+                <img src="http://image.tmdb.org/t/p/w154{{moviedetail.poster_path}}" alt="Movie01" onError="this.onerror=null;this.src='{% static 'images/movie-background.png' %}';">
             </div>
             <div class="col-md-9 col-lg-10">
                 <p class="movieName movieDescName">{{moviedetail.title}}</p>

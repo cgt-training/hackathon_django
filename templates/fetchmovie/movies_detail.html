@@ -25,7 +25,7 @@
 			<div class="col-md-3 col-lg-2">
 				{% load static %}
 				{% with image_path="http://image.tmdb.org/t/p/w154"|add:moviedetail.poster_path %}	
-					<img src={{image_path}} alt="Movie01">
+					<img src={{image_path}} alt="Movie01" onError="this.onerror=null;this.src='{% static 'images/movie-background.png' %}';">
 				{% endwith %}
 			</div>
 			<div class="col-md-9 col-lg-10">
@@ -117,7 +117,11 @@
 	<div class="modal-content" style="width: 930px">
 		<span class="close" data-dismiss="modal">&times;</span>
 		<!--  <h3 class="loginTitle">Rate This Movie</h3> -->
-		<p>Looks like you are in {{request.session.mood_set}} mood. So We recommended you these movies</p>
+		{% if request.session.mood_set == 'inspire' %}
+			<p>Looks like you are feeling bit depressed. Lets checkout these movies to lighten up your mood</p>
+		{% else %}
+			<p>Looks like you are in {{request.session.mood_set}} mood. So We recommended you these movies</p>
+		{% endif %}
 		<ul class="list-inline">
 			{% for row_movie in moodMovies %}
 				<li>

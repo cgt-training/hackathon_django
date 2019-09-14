@@ -45,7 +45,7 @@
 	                                {% load static %}
 	           {% with image_path="http://image.tmdb.org/t/p/w154"|add:row_movie.poster_path %}
 	           			<a href="/similarity?movieId={{row_movie.id}}">                      
-                            <img src={{image_path}} alt="Movie01">
+                            <img src={{image_path}} alt="Movie01" width="150" height="230" onError="this.onerror=null;this.src='{% static 'images/movie-background.png' %}';">
                         </a>                       
 	           {% endwith %}
 	                            </div>
@@ -57,7 +57,7 @@
 	                                </div>
 	                                <div class="pplRecommend">
 	                                    <i class="fa fa-user" aria-hidden="true"></i>
-	                                    <span class="grayText">{{row_movie.vote_count}} people recommended</span>
+	                                    <span class="grayText">{{row_movie.vote_count | floatformat}} people recommended</span>
 	                                </div>
 	                                <button class="btn rateBtn" movieid="{{row_movie.id}}">Rate This Movie</button>
 	                            </div>
